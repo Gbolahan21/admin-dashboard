@@ -228,7 +228,7 @@ function Dashboard({ dashboard, getDashboardStats, navigate, admin }) {
                                 <Download size={18} color="white" />
                             }
                             onClick={() =>
-                                navigate("/reports")
+                                navigate("/report")
                             }
                         />
 
