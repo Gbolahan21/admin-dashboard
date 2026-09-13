@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import NotFound from "./NotFound";
 import {
     BrowserRouter,
     Routes as Switch,
     Route,
-    Navigate,
     useNavigate,
     useParams,
     useLocation,
@@ -106,12 +106,7 @@ class Routes extends Component {
                         {/* 404 */}
                         <Route
                             path="*"
-                            element={
-                                <Navigate
-                                    to="/"
-                                    replace
-                                />
-                            }
+                            element={<NotFound />}
                         />
 
                     </Switch>

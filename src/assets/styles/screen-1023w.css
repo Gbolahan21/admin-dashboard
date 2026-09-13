@@ -57,4 +57,24 @@
     #loading img {
         width: 45%;
     }
+
+    .not-found-card {
+        padding: 40px 24px;
+    }
+
+    .not-found-code {
+        font-size: 72px;
+    }
+
+    .not-found-card h1 {
+        font-size: 25px;
+    }
+
+    .not-found-actions {
+        flex-direction: column;
+    }
+
+    .not-found-actions button {
+        width: 100%;
+    }
 }

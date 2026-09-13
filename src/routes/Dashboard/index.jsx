@@ -195,7 +195,7 @@ function Dashboard({ dashboard, getDashboardStats, navigate, admin }) {
                                 <ArrowRight size={18} color="white" />
                             }
                             onClick={() =>
-                                navigate("/students")
+                                navigate("/student")
                             }
                         />
 
