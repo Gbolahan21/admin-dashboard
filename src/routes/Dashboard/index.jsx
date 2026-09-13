@@ -113,7 +113,7 @@ function Dashboard({ dashboard, getDashboardStats, navigate, admin }) {
                             </p>
 
                             <h2 className="summary-value">
-                                {loading ? "..." : stats.totalStudents}
+                                {stats.totalStudents}
                             </h2>
                         </div>
 
@@ -132,7 +132,7 @@ function Dashboard({ dashboard, getDashboardStats, navigate, admin }) {
                             </p>
 
                             <h2 className="summary-value">
-                                {loading ? "..." : stats.presentToday}
+                                {stats.presentToday}
                             </h2>
                         </div>
 
@@ -151,7 +151,7 @@ function Dashboard({ dashboard, getDashboardStats, navigate, admin }) {
                             </p>
 
                             <h2 className="summary-value">
-                                {loading ? "..." : stats.absentToday}
+                                {stats.absentToday}
                             </h2>
                         </div>
 
@@ -170,10 +170,7 @@ function Dashboard({ dashboard, getDashboardStats, navigate, admin }) {
                             </p>
 
                             <h2 className="summary-value">
-                                {loading
-                                    ? "..."
-                                    : `${stats.attendanceRate}%`
-                                }
+                                {`${stats.attendanceRate}%`}
                             </h2>
                         </div>
 
