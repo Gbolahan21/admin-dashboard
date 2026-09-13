@@ -1,0 +1,56 @@
+@media screen and (max-width: 1023px) {
+    .home-container, .dashboard-container {
+        background-color: #F8FAFC;
+        padding: 10px;
+    }
+
+    .dashboard-content, .dashboard-navbar {
+        padding: 0;
+    }
+
+   .signup-container {
+        padding: 10px;
+        align-items: flex-start;
+    }
+
+    .signup-card {
+        padding: 10px 0;
+        box-shadow: none;
+        border-radius: 0;
+    }
+
+    .summary-container {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        margin-top: 25px;
+    }
+
+    .summary-card {
+        padding: 18px;
+    }
+
+    .summary-value {
+        font-size: 23px;
+    }
+
+    .modal-overlay {
+        padding: 15px;
+    }
+
+    .modal-container {
+        max-width: 100%;
+        border-radius: 12px;
+    }
+
+    .modal-header {
+        padding: 18px;
+    }
+
+    .modal-body {
+        padding: 18px;
+    }
+
+    .logout-actions {
+        flex-direction: column;
+    }
+}
