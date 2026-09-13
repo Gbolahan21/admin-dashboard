@@ -61,7 +61,7 @@ export default function (state = initialState, action) {
       return {
         ...state,
         ...payload.admin,
-        token: payload.token,
+        // token: payload.token,
         authenticated: true,
         initialized: true,
       };

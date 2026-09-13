@@ -9,11 +9,11 @@ const text =
 const token = {
   get: (type) => {
     try {
-      const item = window.localStorage.getItem(type || 'user:token');
+      const item = window.localStorage.getItem(type || 'token');
       return item;
     } catch {
       try {
-        const item = Cookies.get(type || 'user:token');
+        const item = Cookies.get(type || 'token');
         return item;
       } catch {
         return notification.error(text);
@@ -22,10 +22,10 @@ const token = {
   },
   remove: (type) => {
     try {
-      window.localStorage.removeItem(type || 'user:token');
+      window.localStorage.removeItem(type || 'token');
     } catch {
       try {
-        Cookies.remove(type || 'user:token');
+        Cookies.remove(type || 'token');
       } catch {
         notification.error(text);
       }
@@ -33,10 +33,10 @@ const token = {
   },
   set: (newToken, type) => {
     try {
-      window.localStorage.setItem(type || 'user:token', newToken);
+      window.localStorage.setItem(type || 'token', newToken);
     } catch {
       try {
-        Cookies.set(type || 'user:token', newToken);
+        Cookies.set(type || 'token', newToken);
       } catch {
         notification.error(text);
       }

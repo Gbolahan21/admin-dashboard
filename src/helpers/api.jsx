@@ -1,8 +1,8 @@
 import axiosLib from 'axios';
-import { jwtDecode } from 'jwt-decode';
+// import { jwtDecode } from 'jwt-decode';
 
 import token from './token';
-import authRedirect from './authRedirect';
+// import authRedirect from './authRedirect';
 
 let axios = axiosLib;
 const api =
@@ -52,21 +52,21 @@ const api =
           error(e.response && e.response.data, dispatch);
         }
 
-        const redirectToSignin = () => {
-          token.remove();
-          const returnPath = authRedirect.getCurrentReturnPath();
-          window.location = returnPath ? authRedirect.buildSigninPath(returnPath) : '/signin';
-        };
+        // const redirectToSignin = () => {
+        //   token.remove();
+        //   const returnPath = authRedirect.getCurrentReturnPath();
+        //   window.location = returnPath ? authRedirect.buildSigninPath(returnPath) : '/signin';
+        // };
 
-        if (e.response && e.response.status === 401) {
-          redirectToSignin();
-        }
+        // if (e.response && e.response.status === 401) {
+        //   redirectToSignin();
+        // }
 
-        const userToken = token.get('user:token') && jwtDecode(token.get('user:token'));
-        const isExpired = userToken?.exp * 1000 < Date.now();
-        if (isExpired) {
-          redirectToSignin();
-        }
+        // const userToken = token.get('user:token') && jwtDecode(token.get('user:token'));
+        // const isExpired = userToken?.exp * 1000 < Date.now();
+        // if (isExpired) {
+        //   redirectToSignin();
+        // }
 
         return false;
       });

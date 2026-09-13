@@ -56,6 +56,13 @@ const connectedRoutes = {
 };
 
 class Routes extends Component {
+    componentDidMount() {
+        const token = localStorage.getItem("token");
+
+        if (token) {
+            this.props.load();
+        }
+    }
 
     renderRoutes = (routes, isPrivate = false) => {
         return routes.map((route) => {
