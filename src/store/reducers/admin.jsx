@@ -8,26 +8,26 @@ import {
   SIGNUP,
   AUTH_INITIALIZED,
   LOAD,
-  FACULTIES,
-  DEPARTMENTS,
-  LEVELS,
+  // FACULTIES,
+  // DEPARTMENTS,
+  // LEVELS,
 } from '../types';
 
 export const initialState = {
   email: '',
   firstname: '',
   lastname: '',
-  matricNo: '',
-  department: '',
-  faculty: '',
-  level: '',
+  // matricNo: '',
+  // department: '',
+  // faculty: '',
+  // level: '',
   token: '',
   loading: [],
   authenticated: false,
   initialized: false,
-  faculties: [],
-  departments: [],
-  levels: [],
+  // faculties: [],
+  // departments: [],
+  // levels: [],
 };
 
 export default function (state = initialState, action) {
@@ -46,9 +46,10 @@ export default function (state = initialState, action) {
     case SIGNIN:
       return {
         ...state,
-        ...payload.user,
+        ...payload.admin,
         token: payload.token,
         authenticated: true,
+        initialized: true,
       };
 
     case SIGNUP:
@@ -59,27 +60,29 @@ export default function (state = initialState, action) {
     case LOAD:
       return {
         ...state,
-        ...payload.user,
+        ...payload.admin,
+        token: payload.token,
         authenticated: true,
+        initialized: true,
       };
 
-    case FACULTIES:
-      return {
-        ...state,
-        faculties: payload.faculties,
-      };
+    // case FACULTIES:
+    //   return {
+    //     ...state,
+    //     faculties: payload.faculties,
+    //   };
     
-    case DEPARTMENTS:
-      return {
-        ...state,
-        departments: payload.departments,
-      };
+    // case DEPARTMENTS:
+    //   return {
+    //     ...state,
+    //     departments: payload.departments,
+    //   };
 
-    case LEVELS:
-      return {
-        ...state,
-        levels: payload.levels,
-      };
+    // case LEVELS:
+    //   return {
+    //     ...state,
+    //     levels: payload.levels,
+    //   };
 
     case AUTH_INITIALIZED:
       return {

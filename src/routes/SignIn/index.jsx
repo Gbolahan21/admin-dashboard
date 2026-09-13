@@ -1,14 +1,10 @@
 import {useState, useEffect} from "react";
-import {useNavigate, Link} from "react-router-dom";
-import { useDispatch } from "react-redux";
+import {Link} from "react-router-dom";
 import {Button} from "../../components";
 import { Eye, EyeOff, ArrowLeft, LogIn } from "lucide-react";
 import * as Helpers from '../../helpers';
-import { signin } from "../../store/actions/admin";
 
-function SignIn() {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+function SignIn({ signin, navigate }) {
   const [email, setEmail] = useState(() => {
     return localStorage.getItem("savedEmail") || "";
   });
@@ -31,34 +27,31 @@ function SignIn() {
   }, [navigate]);
 
   const handleLogin = () => {
-    console.log('click')
-    dispatch(
-      signin(
-        email.trim().toLowerCase(),
-        password,
+    signin(
+      email.trim().toLowerCase(),
+      password,
 
-        // Error callback
-        (error) => {
-          Helpers.notification.error(error.message)
-        },
+      // Error callback
+      (error) => {
+        Helpers.notification.error(error.message)
+      },
 
-        // Success callback
-        (response) => {
-          localStorage.setItem("user", JSON.stringify(response.user));
-          if (rememberMe) {
-            localStorage.setItem("token", response.token);
+      // Success callback
+      (response) => {
+        localStorage.setItem("student", JSON.stringify(response.admin));
+        if (rememberMe) {
+          localStorage.setItem("token", response.token);
 
-            localStorage.setItem("savedEmail", email.trim().toLowerCase());
-          } else {
-            localStorage.removeItem("token");
-            localStorage.removeItem("savedEmail");
-          }
-
-          Helpers.notification.success(response.message)
-
-          navigate('/dashboard');
+          localStorage.setItem("savedEmail", email.trim().toLowerCase());
+        } else {
+          localStorage.removeItem("token");
+          localStorage.removeItem("savedEmail");
         }
-      )
+
+        Helpers.notification.success(response.message)
+
+        navigate('/dashboard');
+      }
     )
   };
 

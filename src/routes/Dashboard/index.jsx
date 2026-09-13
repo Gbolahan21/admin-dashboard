@@ -1,8 +1,4 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { getDashboardStats } from "../../store/actions/dashboard";
 import {
     Users,
     CalendarCheck,
@@ -13,36 +9,28 @@ import {
     LogOut,
 } from "lucide-react";
 
-import {Button, Modal} from "../../components";
+import {Button, Modal, Loading} from "../../components";
 
 import moh from "../../assets/images/moh.png";
 
-function Dashboard() {
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
+function Dashboard({ dashboard, getDashboardStats, navigate, admin }) {
     const [logoutVisible, setLogoutVisible] = useState(false);
+    const { firstname, title } = admin;
 
-    const storedUser = localStorage.getItem("user");
-
-    const user = storedUser ? JSON.parse(storedUser) : null;
-
-    const {
-        stats,
-        loading,
-        error,
-    } = useSelector((state) => state.dashboard);
+    const { stats, loading, error } = dashboard;
+    const isLoading = loading.includes("/admin/dashboard");
 
     useEffect(() => {
       document.title = 'Dashboard | Moh';
     }, []);
 
     useEffect(() => {
-        dispatch(getDashboardStats());
-    }, [dispatch]);
+        getDashboardStats();
+    }, [getDashboardStats]);
 
     const handleLogout = () => {
         localStorage.removeItem("token");
-        localStorage.removeItem("user");
+        localStorage.removeItem("student");
 
         navigate('/signin');
     };
@@ -55,6 +43,10 @@ function Dashboard() {
 
         return "Good Evening";
     };
+
+    if (isLoading) {
+        return <Loading size="big" />;
+    }
 
     return (
         <div className="dashboard-container">
@@ -91,7 +83,7 @@ function Dashboard() {
                         </h1>
 
                         <p>
-                            Welcome back, {user?.title} {user?.firstname}
+                            Welcome back, {title} {firstname}
                         </p>
                     </div>
 

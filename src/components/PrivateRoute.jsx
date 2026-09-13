@@ -1,23 +1,19 @@
-import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
-import Loader from "./Loader";
+import Loading from "./Loading";
 
-export default function PrivateRoute({ children }) {
-  const authenticated = useSelector(
-    (state) => state.admin?.authenticated
-  );
+function PrivateRoute({ admin, children }) {
 
-  const initialized = useSelector(
-    (state) => state.admin?.initialized
-  );
+    const { authenticated, initialized } = admin 
 
-  if (!initialized) {
-    return <Loader size="large" />;
-  }
+    if (!initialized) {
+        return <Loading size="big" />;
+    }
 
-  if (!authenticated) {
-    return <Navigate to="/signin" replace />;
-  }
+    if (!authenticated) {
+        return <Navigate to="/signin" replace />;
+    }
 
-  return children;
+    return children;
 }
+
+export default PrivateRoute;

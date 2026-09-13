@@ -1,14 +1,10 @@
 import {useState, useEffect} from "react";
-import {useNavigate, Link} from "react-router-dom";
-import { useDispatch } from "react-redux";
+import {Link} from "react-router-dom";
 import {Button, Dropdown} from "../../components";
 import { Eye, EyeOff, ArrowLeft, UserPlus } from "lucide-react";
 import * as Helpers from '../../helpers';
-import { signup } from "../../store/actions/admin";
 
-function SignUp() {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+function SignUp({ signup, navigate }) {
   const [firstname, setFirstName] = useState('');
   const [lastname, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -38,34 +34,32 @@ function SignUp() {
       return;
     }
 
-    dispatch(
-      signup(
-        firstname.trim(),
-        lastname.trim(),
-        email.trim().toLowerCase(),
-        title.trim(),
-        password,
+    signup(
+      firstname.trim(),
+      lastname.trim(),
+      email.trim().toLowerCase(),
+      title.trim(),
+      password,
 
-        // ERROR CALLBACK
-        (error) => {
-          Helpers.notification.error(error?.error || error?.message || "Registration failed");
-        },
+      // ERROR CALLBACK
+      (error) => {
+        Helpers.notification.error(error?.error || error?.message || "Registration failed");
+      },
 
-        // SUCCESS CALLBACK
-        (response) => {
-          setFirstName("");
-          setLastName("");
-          setEmail("");
-          setTitle("");
-          setPassword("");
-          setConfirmPassword("");
+      // SUCCESS CALLBACK
+      (response) => {
+        setFirstName("");
+        setLastName("");
+        setEmail("");
+        setTitle("");
+        setPassword("");
+        setConfirmPassword("");
 
-          Helpers.notification.success(response?.message);
+        Helpers.notification.success(response?.message);
 
-          navigate('/signin');
-        }
-      )
-    );
+        navigate('/signin');
+      }
+    )
   };
 
   const details = !firstname || !lastname || !email || !title || !password || !confirmPassword;

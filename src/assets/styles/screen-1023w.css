@@ -53,4 +53,8 @@
     .logout-actions {
         flex-direction: column;
     }
+
+    #loading img {
+        width: 45%;
+    }
 }

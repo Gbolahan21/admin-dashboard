@@ -35,8 +35,8 @@ export default function (state = initialState, action) {
      case DASHBOARD:
         return {
             ...state,
-            loading: true,
             error: null,
+            stats: payload,
         };
 
     case DASHBOARD_ERROR:

@@ -604,3 +604,17 @@ button:disabled {
 .logout-cancel:hover {
     background: #1f2937;
 }
+
+/* loading */
+#loading {
+  height: 90vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: transparent;
+}
+
+#loading img {
+  width: 30%;
+}
