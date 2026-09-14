@@ -1,11 +1,31 @@
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { ArrowLeft, Home } from "lucide-react";
+import notification from "../helpers/notification";
 
 const NotFound = () => {
     const navigate = useNavigate();
 
+    const admin = useSelector((state) => state.admin);
+
+    const handleDashboard = () => {
+        const token = localStorage.getItem("token");
+
+        if (!token || !admin?.authenticated) {
+            notification.error(
+                "Please sign in to access the dashboard."
+            );
+
+            navigate("/signin");
+            return;
+        }
+
+        navigate("/dashboard");
+    };
+
     return (
         <div className="not-found-page">
+
             <div className="not-found-card">
 
                 <div className="not-found-code">
@@ -15,8 +35,8 @@ const NotFound = () => {
                 <h1>Page not found</h1>
 
                 <p>
-                    Sorry, the page you're looking for doesn't exist or
-                    may have been moved.
+                    Sorry, the page you're looking for doesn't exist
+                    or may have been moved.
                 </p>
 
                 <div className="not-found-actions">
@@ -31,7 +51,7 @@ const NotFound = () => {
 
                     <button
                         className="dashboard-button"
-                        onClick={() => navigate("/dashboard")}
+                        onClick={handleDashboard}
                     >
                         <Home size={18} />
                         Back to Dashboard
@@ -40,6 +60,7 @@ const NotFound = () => {
                 </div>
 
             </div>
+
         </div>
     );
 };

@@ -2,14 +2,17 @@ import { Navigate } from "react-router-dom";
 import Loading from "./Loading";
 
 function PrivateRoute({ admin, children }) {
+    const { authenticated, initialized } = admin;
 
-    const { authenticated, initialized } = admin 
+    const token = localStorage.getItem("token");
 
-    if (!initialized) {
+    // Still checking authentication
+    if (!initialized && token) {
         return <Loading size="big" />;
     }
 
-    if (!authenticated) {
+    // No token = definitely not authenticated
+    if (!token || !authenticated) {
         return <Navigate to="/signin" replace />;
     }
 

@@ -15,10 +15,10 @@ import moh from "../../assets/images/moh.png";
 
 function Dashboard({ dashboard, getDashboardStats, navigate, admin }) {
     const [logoutVisible, setLogoutVisible] = useState(false);
+    const [isDashboardLoading, setIsDashboardLoading] = useState(true);
     const { firstname, title } = admin;
 
-    const { stats, loading, error } = dashboard;
-    const isLoading = loading.includes("/admin/dashboard");
+    const { stats, error } = dashboard;
 
     useEffect(() => {
       document.title = 'Dashboard | Moh';
@@ -26,7 +26,36 @@ function Dashboard({ dashboard, getDashboardStats, navigate, admin }) {
 
     useEffect(() => {
         getDashboardStats();
-    }, [getDashboardStats]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        const loadDashboard = async () => {
+            setIsDashboardLoading(true);
+
+            const startTime = Date.now();
+
+            try {
+                await getDashboardStats();
+            } finally {
+                const elapsed = Date.now() - startTime;
+                const minimumTime = 1000;
+
+                const remainingTime = minimumTime - elapsed;
+
+                if (remainingTime > 0) {
+                    await new Promise((resolve) =>
+                        setTimeout(resolve, remainingTime)
+                    );
+                }
+
+                setIsDashboardLoading(false);
+            }
+        };
+
+        loadDashboard();
+         // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const handleLogout = () => {
         localStorage.removeItem("token");
@@ -44,7 +73,7 @@ function Dashboard({ dashboard, getDashboardStats, navigate, admin }) {
         return "Good Evening";
     };
 
-    if (isLoading) {
+    if (isDashboardLoading) {
         return <Loading size="big" />;
     }
 
