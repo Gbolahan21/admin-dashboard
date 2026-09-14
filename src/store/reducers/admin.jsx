@@ -8,26 +8,16 @@ import {
   SIGNUP,
   AUTH_INITIALIZED,
   LOAD,
-  // FACULTIES,
-  // DEPARTMENTS,
-  // LEVELS,
 } from '../types';
 
 export const initialState = {
   email: '',
   firstname: '',
   lastname: '',
-  // matricNo: '',
-  // department: '',
-  // faculty: '',
-  // level: '',
   token: '',
   loading: [],
   authenticated: false,
   initialized: false,
-  // faculties: [],
-  // departments: [],
-  // levels: [],
 };
 
 export default function (state = initialState, action) {

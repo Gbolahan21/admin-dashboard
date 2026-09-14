@@ -1,0 +1,4 @@
+export const FACULTY = 'FACULTY';
+export const FACULTY_CREATE = 'FACULTY_CREATE';
+export const FACULTY_UPDATE = 'FACULTY_UPDATE';
+export const FACULTY_DELETE = 'FACULTY_DELETE';
