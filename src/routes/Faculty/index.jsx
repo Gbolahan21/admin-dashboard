@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Plus, Pencil, Trash } from "lucide-react";
 
-import { Modal, Pagination } from "../../components";
+import { Modal, Pagination, Loading } from "../../components";
 
 function Faculty({
     faculty,
@@ -13,6 +13,7 @@ function Faculty({
     const { faculties } = faculty;
 
     const [modalVisible, setModalVisible] = useState(false);
+    const [isFacultyLoading, setIsFacultyLoading] = useState(true);
     const [facultyName, setFacultyName] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [editingFaculty, setEditingFaculty] = useState(null);
@@ -26,10 +27,33 @@ function Faculty({
     }, []);
 
     useEffect(() => {
-        getFaculties();
+        const loadFaculty = async () => {
+            setIsFacultyLoading(true);
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+            const startTime = Date.now();
+
+            try {
+                await getFaculties();
+            } finally {
+                const elapsed = Date.now() - startTime;
+                const minimumTime = 1000;
+
+                const remainingTime = minimumTime - elapsed;
+
+                if (remainingTime > 0) {
+                    await new Promise((resolve) =>
+                        setTimeout(resolve, remainingTime)
+                    );
+                }
+
+                setIsFacultyLoading(false);
+            }
+        };
+
+        loadFaculty();
+         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
 
     const openEditModal = (faculty) => {
         setEditingFaculty(faculty);
@@ -139,6 +163,10 @@ function Faculty({
         startIndex,
         startIndex + itemsPerPage
     );
+
+    if (isFacultyLoading) {
+        return <Loading size="big" />;
+    }
 
     return (
         <div className="faculty-page">

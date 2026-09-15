@@ -762,7 +762,6 @@ button:disabled {
 /* loading */
 #loading {
   height: 90vh;
-  /* width: 100vw; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -771,6 +770,32 @@ button:disabled {
 
 #loading img {
   width: 30%;
+}
+
+#loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#loading img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    animation: logoPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes logoPulse {
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
 }
 
 /* 404 */

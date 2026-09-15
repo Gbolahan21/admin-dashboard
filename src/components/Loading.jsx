@@ -1,7 +1,7 @@
 import {Component} from 'react';
 import PropTypes from 'prop-types';
 
-import carrotLoader from '../assets/images/carrot-loader-fast.gif';
+import mohLogo from '../assets/images/moh.png';
 
 class Loading extends Component {
   render() {
@@ -9,7 +9,7 @@ class Loading extends Component {
     if (size === 'big') {
       return (
         <div id="loading">
-          <img src={carrotLoader} alt="Loading" />
+          <img src={mohLogo} alt="Loading" />
         </div>
       );
     }
