@@ -6,6 +6,7 @@ import faculty from './faculty';
 import department from './department';
 import level from './level';
 import semester from './semester';
+import course from './course';
 
 export default combineReducers({
   admin,
@@ -14,4 +15,5 @@ export default combineReducers({
   department,
   level,
   semester,
+  course
 });

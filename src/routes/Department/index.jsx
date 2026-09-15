@@ -148,7 +148,7 @@ function Department({
             await deleteDepartment(
                 deletingDepartment.id,
                 (error) => {
-                    console.error("Delete faculty error:", error);
+                    console.error("Delete department error:", error);
                 },
                 () => {
                     setDeletingDepartment(null);
@@ -454,7 +454,7 @@ function Department({
                         onClick={handleDelete}
                         disabled={isSubmitting}
                     >
-                        {isSubmitting ? "Deleting..." : "Delete Faculty"}
+                        {isSubmitting ? "Deleting..." : "Delete Department"}
                     </button>
                 </div>
             </Modal>
