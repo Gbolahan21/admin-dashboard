@@ -38,7 +38,7 @@ function SignIn({ signin, navigate }) {
 
       // Success callback
       (response) => {
-        localStorage.setItem("student", JSON.stringify(response.admin));
+        localStorage.setItem("admin", JSON.stringify(response.admin));
         if (rememberMe) {
           localStorage.setItem("token", response.token);
 

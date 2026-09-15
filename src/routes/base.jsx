@@ -6,6 +6,11 @@ import Student from "./Student";
 import AttendanceToday from "./AttendanceToday";
 import AttendanceAnalytics from "./AttendanceAnalytics";
 import Report from "./Report";
+import Faculty from "./Faculty";
+import Department from "./Department";
+import Level from "./Level";
+import Course from "./Course";
+import Semester from "./Semester";
 
 const baseRoutes = {
   public: [
@@ -51,6 +56,31 @@ const baseRoutes = {
       name: "Report",
       component: Report,
       path: "/report",
+    },
+    {
+      name: "Faculty",
+      component: Faculty,
+      path: "/faculty",
+    },
+    {
+      name: "Department",
+      component: Department,
+      path: "/department",
+    },
+    {
+      name: "Level",
+      component: Level,
+      path: "/level",
+    },
+    {
+      name: "Course",
+      component: Course,
+      path: "/course",
+    },
+    {
+      name: "Semester",
+      component: Semester,
+      path: "/semester",
     },
   ],
 };

@@ -4,14 +4,10 @@ import {
     CalendarCheck,
     CalendarX,
     TrendingUp,
-    ArrowRight,
-    Download,
     LogOut,
 } from "lucide-react";
 
 import {Button, Modal, Loading} from "../../components";
-
-import moh from "../../assets/images/moh.png";
 
 function Dashboard({ dashboard, getDashboardStats, navigate, admin }) {
     const [logoutVisible, setLogoutVisible] = useState(false);
@@ -22,11 +18,6 @@ function Dashboard({ dashboard, getDashboardStats, navigate, admin }) {
 
     useEffect(() => {
       document.title = 'Dashboard | Moh';
-    }, []);
-
-    useEffect(() => {
-        getDashboardStats();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -59,7 +50,7 @@ function Dashboard({ dashboard, getDashboardStats, navigate, admin }) {
 
     const handleLogout = () => {
         localStorage.removeItem("token");
-        localStorage.removeItem("student");
+        localStorage.removeItem("admin");
 
         navigate('/signin');
     };
@@ -80,192 +71,123 @@ function Dashboard({ dashboard, getDashboardStats, navigate, admin }) {
     return (
         <div className="dashboard-container">
 
-            {/* Navbar */}
-            <header className="dashboard-navbar">
-
-                <img
-                    src={moh}
-                    alt="MOH"
-                    className="dashboard-logo"
-                />
-
-                <button
-                    type="button"
-                    className="logout-button"
-                    onClick={() => setLogoutVisible(true)}
-                >
-                    <LogOut size={18} />
-                    <span>Logout</span>
-                </button>
-
-            </header>
-
-
-            {/* Content */}
-            <main className="dashboard-content">
-
-                <div className="dashboard-header">
-
-                    <div>
-                        <h1>
-                            {getGreeting()} 👋
-                        </h1>
-
-                        <p>
-                            Welcome back, {title} {firstname}
-                        </p>
-                    </div>
-
-                </div>
-
-
-                {/* Error */}
-                {error && (
-                    <div className="dashboard-error">
-                        {error}
-                    </div>
-                )}
-
-
-                {/* Statistics */}
-                <div className="summary-container">
-
-                    <div className="summary-card">
-
-                        <div className="summary-icon">
-                            <Users size={22} />
-                        </div>
-
+            <div className="dashboard-main">
+                <header className="dashboard-navbar">
+                    <div className="dashboard-header">
                         <div>
-                            <p className="summary-title">
-                                Students
-                            </p>
+                            <h1>
+                                {getGreeting()} 👋
+                            </h1>
+                        </div>
+                    </div>
 
-                            <h2 className="summary-value">
-                                {stats.totalStudents}
-                            </h2>
+                    <div className="dashboard-logout">
+                        <button
+                            type="button"
+                            className="logout-button"
+                            onClick={handleLogout}
+                        >
+                            <LogOut size={18} />
+                            Logout
+                        </button>
+                    </div>
+                </header>
+
+
+                <main className="dashboard-content">
+                    <p>
+                        Welcome back, {title} {firstname}
+                    </p>
+
+                    {/* Error */}
+                    {error && (
+                        <div className="dashboard-error">
+                            {error}
+                        </div>
+                    )}
+
+
+                    {/* Statistics */}
+                    <div className="summary-container">
+
+                        <div className="summary-card">
+
+                            <div className="summary-icon">
+                                <Users size={22} />
+                            </div>
+
+                            <div>
+                                <p className="summary-title">
+                                    Students
+                                </p>
+
+                                <h2 className="summary-value">
+                                    {stats.totalStudents}
+                                </h2>
+                            </div>
+
+                        </div>
+
+
+                        <div className="summary-card">
+
+                            <div className="summary-icon">
+                                <CalendarCheck size={22} />
+                            </div>
+
+                            <div>
+                                <p className="summary-title">
+                                    Present Today
+                                </p>
+
+                                <h2 className="summary-value">
+                                    {stats.presentToday}
+                                </h2>
+                            </div>
+
+                        </div>
+
+
+                        <div className="summary-card">
+
+                            <div className="summary-icon">
+                                <CalendarX size={22} />
+                            </div>
+
+                            <div>
+                                <p className="summary-title">
+                                    Absent Today
+                                </p>
+
+                                <h2 className="summary-value">
+                                    {stats.absentToday}
+                                </h2>
+                            </div>
+
+                        </div>
+
+
+                        <div className="summary-card">
+
+                            <div className="summary-icon">
+                                <TrendingUp size={22} />
+                            </div>
+
+                            <div>
+                                <p className="summary-title">
+                                    Attendance Rate
+                                </p>
+
+                                <h2 className="summary-value">
+                                    {`${stats.attendanceRate}%`}
+                                </h2>
+                            </div>
+
                         </div>
 
                     </div>
-
-
-                    <div className="summary-card">
-
-                        <div className="summary-icon">
-                            <CalendarCheck size={22} />
-                        </div>
-
-                        <div>
-                            <p className="summary-title">
-                                Present Today
-                            </p>
-
-                            <h2 className="summary-value">
-                                {stats.presentToday}
-                            </h2>
-                        </div>
-
-                    </div>
-
-
-                    <div className="summary-card">
-
-                        <div className="summary-icon">
-                            <CalendarX size={22} />
-                        </div>
-
-                        <div>
-                            <p className="summary-title">
-                                Absent Today
-                            </p>
-
-                            <h2 className="summary-value">
-                                {stats.absentToday}
-                            </h2>
-                        </div>
-
-                    </div>
-
-
-                    <div className="summary-card">
-
-                        <div className="summary-icon">
-                            <TrendingUp size={22} />
-                        </div>
-
-                        <div>
-                            <p className="summary-title">
-                                Attendance Rate
-                            </p>
-
-                            <h2 className="summary-value">
-                                {`${stats.attendanceRate}%`}
-                            </h2>
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                {/* Quick Actions */}
-                <section className="quick-actions">
-
-                    <h2 className="section-title">
-                        Quick Actions
-                    </h2>
-
-
-                    <div className="actions-grid">
-
-                        <Button
-                            title="View Students"
-                            iconRight={
-                                <ArrowRight size={18} color="white" />
-                            }
-                            onClick={() =>
-                                navigate("/student")
-                            }
-                        />
-
-
-                        <Button
-                            title="Today's Attendance"
-                            iconRight={
-                                <ArrowRight size={18} color="white" />
-                            }
-                            onClick={() =>
-                                navigate("/attendance/today")
-                            }
-                        />
-
-
-                        <Button
-                            title="Attendance Analytics"
-                            iconRight={
-                                <ArrowRight size={18} color="white" />
-                            }
-                            onClick={() =>
-                                navigate("/attendance/analytics")
-                            }
-                        />
-
-
-                        <Button
-                            title="Export Reports"
-                            iconRight={
-                                <Download size={18} color="white" />
-                            }
-                            onClick={() =>
-                                navigate("/report")
-                            }
-                        />
-
-                    </div>
-
-                </section>
-
-            </main>
+                </main>
+            </div>
 
             <Modal
                 open={logoutVisible}

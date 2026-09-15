@@ -12,7 +12,7 @@ import {
 
 import baseRoutes from "./base";
 import * as Actions from "../store/actions";
-import { PrivateRoute } from "../components";
+import { PrivateRoute, Layout } from "../components";
 import Loading from "../components/Loading";
 
 const withRouter = (Child) => {
@@ -64,7 +64,7 @@ class Routes extends Component {
         }
     }
 
-    renderRoutes = (routes, isPrivate = false) => {
+    renderPublicRoutes = (routes) => {
         return routes.map((route) => {
             const Page = route.component;
 
@@ -72,18 +72,34 @@ class Routes extends Component {
                 <Route
                     key={route.path}
                     path={route.path}
-                    element={
-                        isPrivate ? (
-                            <PrivateRoute admin={this.props.admin}>
-                                <Page />
-                            </PrivateRoute>
-                        ) : (
-                            <Page />
-                        )
-                    }
+                    element={<Page />}
                 />
             );
         });
+    };
+
+    renderPrivateRoutes = (routes) => {
+        return (
+            <Route
+                element={
+                    <PrivateRoute admin={this.props.admin}>
+                        <Layout />
+                    </PrivateRoute>
+                }
+            >
+                {routes.map((route) => {
+                    const Page = route.component;
+
+                    return (
+                        <Route
+                            key={route.path}
+                            path={route.path}
+                            element={<Page />}
+                        />
+                    );
+                })}
+            </Route>
+        );
     };
 
     render() {
@@ -93,14 +109,13 @@ class Routes extends Component {
                     <Switch>
 
                         {/* Public */}
-                        {this.renderRoutes(
+                        {this.renderPublicRoutes(
                             connectedRoutes.public
                         )}
 
                         {/* Private */}
-                        {this.renderRoutes(
+                        {this.renderPrivateRoutes(
                             connectedRoutes.private,
-                            true
                         )}
 
                         {/* 404 */}
