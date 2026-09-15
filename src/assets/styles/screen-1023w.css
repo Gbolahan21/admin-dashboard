@@ -100,14 +100,6 @@
         min-height: 100vh;
     }
 
-    .dashboard-logout {
-        display: none;
-    }
-
-    .sidebar-footer {
-        display: block;
-    }
-
     /* Mobile hamburger area */
     .mobile-header {
         height: 60px;
@@ -226,13 +218,14 @@
 
     .faculty-card {
         padding: 18px;
-
         background: #ffffff;
-
         border: 1px solid #e5e7eb;
         border-radius: 12px;
-
         box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    .faculty-card:last-child {
+        margin-bottom: 20px;
     }
 
     .faculty-card-header {

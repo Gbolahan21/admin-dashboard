@@ -4,7 +4,6 @@ import {
     CalendarCheck,
     CalendarX,
     TrendingUp,
-    LogOut,
 } from "lucide-react";
 
 import {Button, Modal, Loading} from "../../components";
@@ -79,17 +78,6 @@ function Dashboard({ dashboard, getDashboardStats, navigate, admin }) {
                                 {getGreeting()} 👋
                             </h1>
                         </div>
-                    </div>
-
-                    <div className="dashboard-logout">
-                        <button
-                            type="button"
-                            className="logout-button"
-                            onClick={handleLogout}
-                        >
-                            <LogOut size={18} />
-                            Logout
-                        </button>
                     </div>
                 </header>
 

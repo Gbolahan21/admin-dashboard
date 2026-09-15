@@ -594,10 +594,6 @@ button:disabled {
     width: 100%;
 }
 
-.sidebar-footer {
-    display: none;
-}
-
 /* notification */
 .notification {
   background: #ffffff;

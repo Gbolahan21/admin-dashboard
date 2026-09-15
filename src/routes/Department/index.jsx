@@ -27,7 +27,7 @@ function Department({
     const itemsPerPage = 10;
 
     useEffect(() => {
-        document.title = "Faculty | Moh";
+        document.title = "Department | Moh";
     }, []);
 
     useEffect(() => {
