@@ -7,6 +7,7 @@ import {
   SEMESTER_CREATE,
   SEMESTER_UPDATE,
   SEMESTER_DELETE,
+  SEMESTER_CURRENT
 } from '../types';
 
 
@@ -82,5 +83,21 @@ export const deleteSemester = (id, error, success) =>
     { error, success },
 
     { error: ERROR, loading: LOADING, responder: SEMESTER_DELETE }
+
+  );
+
+export const setCurrentSemester = (id, error, success) =>
+
+  Helpers.api(
+
+    `/semester/${id}/current`,
+
+    'PATCH',
+
+    {},
+
+    { error, success },
+
+    { error: ERROR, loading: LOADING, responder: SEMESTER_CURRENT }
 
   );

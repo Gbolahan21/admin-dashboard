@@ -3,6 +3,7 @@ import {
   SEMESTER_CREATE,
   SEMESTER_UPDATE,
   SEMESTER_DELETE,
+  SEMESTER_CURRENT
 } from "../types";
 
 const initialState = {
@@ -14,6 +15,7 @@ export default function (state = initialState, action) {
   const { payload } = action;
 
   switch (action.type) {
+
     case SEMESTER:
       return {
         ...state,
@@ -45,6 +47,16 @@ export default function (state = initialState, action) {
         semesters: state.semesters.filter(
           (semester) => semester.id !== payload.id
         ),
+      };
+
+    case SEMESTER_CURRENT:
+      return {
+        ...state,
+        semesters: state.semesters.map((semester) => ({
+          ...semester,
+          is_current:
+            semester.id === payload.semester.id,
+        })),
       };
 
     default:

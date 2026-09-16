@@ -1249,3 +1249,93 @@ button:disabled {
 .pagination-arrow {
     margin: 0 4px;
 }
+
+/* =========================
+   STUDENT SEARCH
+========================= */
+
+.student-search-container {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.student-search {
+    width: 100%;
+    max-width: 450px;
+    height: 44px;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 0 14px;
+
+    background: #fff;
+    border: 1px solid #e2e2e2;
+    border-radius: 8px;
+
+    box-sizing: border-box;
+}
+
+.student-search input {
+    flex: 1;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    font-size: 14px;
+}
+
+.student-search input:focus {
+    outline: none;
+}
+
+.student-details {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.student-details-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.student-details-section h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.student-details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.student-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.student-detail span {
+    font-size: 13px;
+    color: #777;
+}
+
+.student-detail strong {
+    font-size: 14px;
+    font-weight: 500;
+    color: #222;
+    word-break: break-word;
+}
+
+.faculty-action-button.current {
+    cursor: default;
+    font-weight: 600;
+    border: 1px solid #22c55e;
+}

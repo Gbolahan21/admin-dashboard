@@ -9,6 +9,7 @@ function Semester({
     createSemester,
     updateSemester,
     deleteSemester,
+    setCurrentSemester
 }) {
     const { semesters } = semester;
 
@@ -16,8 +17,10 @@ function Semester({
     const [isSemesterLoading, setIsSemesterLoading] = useState(true);
     const [semesterName, setSemesterName] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSettingCurrent, setIsSettingCurrent] = useState(false);
     const [editingSemester, setEditingSemester] = useState(null);
     const [deletingSemester, setDeletingSemester] = useState(null);
+    const [selectedCurrentSemester, setSelectedCurrentSemester] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
 
     const itemsPerPage = 10;
@@ -133,6 +136,45 @@ function Semester({
         }
     };
 
+    const openCurrentSemesterModal = (semester) => {
+        if (semester.is_current || isSettingCurrent) {
+            return;
+        }
+
+        setSelectedCurrentSemester(semester);
+    };
+
+    const closeCurrentSemesterModal = () => {
+        if (isSettingCurrent) return;
+
+        setSelectedCurrentSemester(null);
+    };
+
+    const handleSetCurrentSemester = async () => {
+        if (!selectedCurrentSemester || isSettingCurrent) {
+            return;
+        }
+
+        setIsSettingCurrent(true);
+
+        try {
+            await setCurrentSemester(
+                selectedCurrentSemester.id,
+                (error) => {
+                    console.error(
+                        "Set current semester error:",
+                        error
+                    );
+                },
+                () => {
+                    setSelectedCurrentSemester(null);
+                }
+            );
+        } finally {
+            setIsSettingCurrent(false);
+        }
+    };
+
     const handleDelete = async () => {
         if (!deletingSemester) return;
 
@@ -227,6 +269,19 @@ function Semester({
                                             <div className="faculty-actions">
                                                 <button
                                                     type="button"
+                                                    className={`faculty-action-button ${
+                                                        semester.is_current ? "current" : ""
+                                                    }`}
+                                                    onClick={() => openCurrentSemesterModal(semester)}
+                                                    disabled={semester.is_current || isSettingCurrent}
+                                                >
+                                                    {semester.is_current
+                                                        ? "Current Semester"
+                                                        : "Set Current"}
+                                                </button>
+
+                                                <button
+                                                    type="button"
                                                     className="faculty-action-button"
                                                     onClick={() =>
                                                         openEditModal(semester)
@@ -283,6 +338,19 @@ function Semester({
                                     </div>
 
                                     <div className="faculty-card-actions">
+                                        <button
+                                            type="button"
+                                            className={`faculty-action-button ${
+                                                semester.is_current ? "current" : ""
+                                            }`}
+                                            onClick={() => openCurrentSemesterModal(semester)}
+                                            disabled={semester.is_current || isSettingCurrent}
+                                        >
+                                            {semester.is_current
+                                                ? "Current Semester"
+                                                : "Set Current"}
+                                        </button>
+
                                         <button
                                             type="button"
                                             className="faculty-action-button"
@@ -402,6 +470,43 @@ function Semester({
                         disabled={isSubmitting}
                     >
                         {isSubmitting ? "Deleting..." : "Delete Semester"}
+                    </button>
+                </div>
+            </Modal>
+
+            {/* Set Current Semester Modal */}
+            <Modal
+                open={Boolean(selectedCurrentSemester)}
+                onClose={closeCurrentSemesterModal}
+                title="Set Current Semester?"
+            >
+                <p className="logout-message">
+                    Are you sure you want to set{" "}
+                    <strong>
+                        {selectedCurrentSemester?.name}
+                    </strong>{" "}
+                    as the current semester?
+                </p>
+
+                <div className="faculty-modal-actions">
+                    <button
+                        type="button"
+                        className="faculty-cancel-button"
+                        onClick={closeCurrentSemesterModal}
+                        disabled={isSettingCurrent}
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="button"
+                        className="faculty-save-button"
+                        onClick={handleSetCurrentSemester}
+                        disabled={isSettingCurrent}
+                    >
+                        {isSettingCurrent
+                            ? "Setting..."
+                            : "Set Current"}
                     </button>
                 </div>
             </Modal>
