@@ -25,6 +25,7 @@ function Course({
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [courseCode, setCourseCode] = useState("");
     const [courseTitle, setCourseTitle] = useState("");
+    const [courseUnit, setCourseUnit] = useState("");
     const [selectedLevel, setSelectedLevel] = useState("");
     const [selectedSemester, setSelectedSemester] = useState("");
     const [selectedDepartment, setSelectedDepartment] = useState("");
@@ -74,6 +75,7 @@ function Course({
         setEditingCourse(course);
         setCourseCode(course.course_code);
         setCourseTitle(course.course_title);
+        setCourseUnit(String(course.course_unit ?? ""));
         setSelectedLevel(String(course.level_id));
         setSelectedDepartment(String(course.department_id));
         setSelectedSemester(String(course.semester_id));
@@ -84,6 +86,7 @@ function Course({
         setEditingCourse(null);
         setCourseCode("");
         setCourseTitle("");
+        setCourseUnit("");
         setSelectedLevel("");
         setSelectedDepartment("");
         setSelectedSemester("");
@@ -96,6 +99,7 @@ function Course({
         setModalVisible(false);
         setCourseCode("");
         setCourseTitle("");
+        setCourseUnit("");
         setSelectedLevel("");
         setSelectedDepartment("");
         setSelectedSemester("");
@@ -111,14 +115,16 @@ function Course({
 
         setDeletingCourse(null);
     };
+    
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
         const code = courseCode.trim();
         const title = courseTitle.trim();
+        const unit = Number(courseUnit);
 
-        if (!code || !title || !selectedLevel || !selectedDepartment || !selectedSemester) {
+        if (!code || !title || !courseUnit || unit < 1 || unit > 6 || !selectedLevel || !selectedDepartment || !selectedSemester) {
             return;
         }
 
@@ -130,6 +136,7 @@ function Course({
                     editingCourse.id,
                     code,
                     title,
+                    unit,
                     Number(selectedDepartment),
                     Number(selectedLevel),
                     Number(selectedSemester),
@@ -147,6 +154,7 @@ function Course({
                 await createCourse(
                     code,
                     title,
+                    unit,
                     Number(selectedDepartment),
                     Number(selectedLevel),
                     Number(selectedSemester),
@@ -239,6 +247,7 @@ function Course({
                                     <th>#</th>
                                     <th>Course Code</th>
                                     <th>Course Title</th>
+                                    <th>Course Unit</th>
                                     <th>Department</th>
                                     <th>Level</th>
                                     <th>Semester</th>
@@ -261,6 +270,10 @@ function Course({
 
                                         <td>
                                             {course.course_title}
+                                        </td>
+
+                                        <td>
+                                            {course.course_unit}
                                         </td>
 
                                         <td>
@@ -341,16 +354,23 @@ function Course({
                                         </div>
 
                                         <div className="faculty-card-detail">
-                                            <span>Department</span>
+                                            <span>Course Unit</span>
 
                                             <strong>
-                                                {course.department_name}
+                                                {course.course_unit}
                                             </strong>
                                         </div>
 
                                     </div>
 
                                     <div className="faculty-card-details">
+                                        <div className="faculty-card-detail">
+                                            <span>Department</span>
+
+                                            <strong>
+                                                {course.department_name}
+                                            </strong>
+                                        </div>
 
                                         <div className="faculty-card-detail">
                                             <span>Level</span>
@@ -359,7 +379,9 @@ function Course({
                                                 {course.level_name}
                                             </strong>
                                         </div>
+                                    </div>
 
+                                    <div className="faculty-card-details">
                                         <div className="faculty-card-detail">
                                             <span>Semester</span>
 
@@ -368,9 +390,6 @@ function Course({
                                             </strong>
                                         </div>
 
-                                    </div>
-
-                                    <div className="faculty-card-details">
                                         <div className="faculty-card-detail">
                                             <span>Created</span>
 
@@ -380,7 +399,6 @@ function Course({
                                                 ).toLocaleDateString()}
                                             </strong>
                                         </div>
-
                                     </div>
 
                                     <div className="faculty-card-actions">
@@ -510,6 +528,26 @@ function Course({
                             }
                             placeholder="Enter course title"
                             disabled={isSubmitting}
+                            style={{marginBottom: '20px'}}
+                        />
+                    </div>
+
+                    <div className="faculty-form-group">
+                        <label htmlFor="courseUnit">
+                            Course Unit
+                        </label>
+
+                        <input
+                            id="courseUnit"
+                            type="number"
+                            min="1"
+                            max="6"
+                            value={courseUnit}
+                            onChange={(event) =>
+                                setCourseUnit(event.target.value)
+                            }
+                            placeholder="Enter course unit"
+                            disabled={isSubmitting}
                         />
                     </div>
 
@@ -531,6 +569,7 @@ function Course({
                                 isSubmitting ||
                                 !courseCode.trim() ||
                                 !courseTitle.trim() ||
+                                !courseUnit ||
                                 !selectedDepartment ||
                                 !selectedLevel ||
                                 !selectedSemester
@@ -543,7 +582,6 @@ function Course({
                                     : "Save Course"}
                         </button>
                     </div>
-
                 </form>
             </Modal>
 

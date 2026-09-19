@@ -26,6 +26,7 @@ export const getCourses = (error, success) =>
 export const createCourse = (
     course_code,
     course_title,
+    course_unit,
     department_id,
     level_id,
     semester_id,
@@ -38,6 +39,7 @@ export const createCourse = (
         {
             course_code,
             course_title,
+            course_unit,
             department_id,
             level_id,
             semester_id,
@@ -54,6 +56,7 @@ export const updateCourse = (
     id,
     course_code,
     course_title,
+    course_unit,
     department_id,
     level_id,
     semester_id,
@@ -66,6 +69,7 @@ export const updateCourse = (
         {
             course_code,
             course_title,
+            course_unit,
             department_id,
             level_id,
             semester_id,
