@@ -1,37 +1,123 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   CalendarCheck,
   Users,
   UserCheck,
   CalendarX,
 } from "lucide-react";
+import {Button, Modal, Dropdown} from '../../components'
 
-function Attendance({ getAttendance, attendance }) {
+function Attendance({ getAttendance, attendance, level, student, getRegCourses, getLevels }) {
+  const { reg_courses } = student;
+  const { levels } = level;
+  const [search, setSearch] = useState("");
+  const [filterDraft, setFilterDraft] = useState({
+    status: "",
+    level: "",
+    course: "",
+    date: "",
+  });
+
+  const [appliedFilters, setAppliedFilters] = useState({
+    status: "",
+    level: "",
+    course: "",
+    date: "",
+  });
+  const [filterVisible, setFilterVisible] = useState(false);
+
   useEffect(() => {
     document.title = "Attendance | Moh";
   }, []);
 
   useEffect(() => {
     getAttendance();
+    getRegCourses();
+    getLevels();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Your attendance prop is:
-  // { attendance: [...] }
   const records = attendance?.attendance || [];
 
-  // =========================
-  // Statistics
-  // =========================
+  const filteredRecords = records.filter((record) => {
+    const searchValue = search.toLowerCase().trim();
 
-  const totalRecords = records.length;
+    const matchesSearch =
+        !searchValue ||
+        record.level_name?.toLowerCase().includes(searchValue) ||
+        record.course_code?.toLowerCase().includes(searchValue)
 
-  const presentRecords = records.filter(
+    const matchesStatus =
+        !appliedFilters.status ||
+        record.status?.toLowerCase() === appliedFilters.status.toLowerCase();
+
+    const matchesLevel =
+        !appliedFilters.level ||
+        record.level_name?.toLowerCase() === appliedFilters.level.toLowerCase();
+
+    const matchesCourse =
+        !appliedFilters.course ||
+        record.course_code === appliedFilters.course;
+
+    const matchesDate =
+        !appliedFilters.date ||
+        record.attendance_date?.split("T")[0] === appliedFilters.date;
+
+    return (
+        matchesSearch &&
+        matchesStatus &&
+        matchesLevel &&
+        matchesCourse &&
+        matchesDate
+    );
+  });
+
+  const updateFilter = (name, value) => {
+    setFilterDraft((prev) => ({
+        ...prev,
+        [name]: value,
+    }));
+  };
+
+  const clearFilters = () => {
+    const emptyFilters = {
+        status: "",
+        level: "",
+        course: "",
+        date: "",
+    };
+
+    setSearch("");
+    setFilterDraft(emptyFilters);
+    setAppliedFilters(emptyFilters);
+  };
+
+  const applyFilters = () => {
+    setAppliedFilters(filterDraft);
+    setFilterVisible(false);
+  };
+
+  const closeModal = useCallback(() => {
+    setFilterVisible(false);
+    setFilterDraft(appliedFilters);
+  }, [appliedFilters]);
+
+  const openModal = useCallback(() => {
+    setFilterVisible(true);
+  }, []);
+
+  const handleSearch = useCallback((e) => {
+    setSearch(e.target.value)
+  }, [])
+
+  const totalRecords = filteredRecords.length;
+
+  const presentRecords = filteredRecords.filter(
     (record) => record.status?.toLowerCase() === "present"
   ).length;
 
-  const absentRecords = records.filter(
+  const absentRecords = filteredRecords.filter(
     (record) => record.status?.toLowerCase() === "absent"
   ).length;
 
@@ -39,10 +125,6 @@ function Attendance({ getAttendance, attendance }) {
     totalRecords > 0
       ? Math.round((presentRecords / totalRecords) * 100)
       : 0;
-
-  // =========================
-  // Format Date
-  // =========================
 
   const formatDate = (date) => {
     if (!date) return "-";
@@ -53,10 +135,6 @@ function Attendance({ getAttendance, attendance }) {
       day: "numeric",
     });
   };
-
-  // =========================
-  // Format Time
-  // =========================
 
   const formatTime = (time) => {
     if (!time) return "-";
@@ -161,14 +239,15 @@ function Attendance({ getAttendance, attendance }) {
           <div className="attendance-search">
             <input
               type="text"
-              placeholder="Search student or course..."
+              value={search}
+              onChange={handleSearch}
+              placeholder="Search course_code or level"
             />
           </div>
 
-          <button className="attendance-filter-btn">
+          <button className="attendance-filter-btn" onClick={openModal}>
             Filter
           </button>
-
         </div>
 
         {/* Table */}
@@ -184,6 +263,22 @@ function Attendance({ getAttendance, attendance }) {
                             Attendance records will appear here
                             when students begin checking in.
                         </p>
+                    </div>
+                </div>
+            ) : filteredRecords.length === 0 ? (
+                <div className="faculty-empty">
+                    <div className="attendance-empty">
+                        <h3>No matching records</h3>
+                        <p>
+                            No attendance records match your search or
+                            selected filters.
+                        </p>
+
+                        <Button
+                            title="Clear"
+                            type="button"
+                            onClick={clearFilters}
+                        />
                     </div>
                 </div>
             ) : (
@@ -206,7 +301,7 @@ function Attendance({ getAttendance, attendance }) {
                         </thead>
 
                         <tbody>
-                            {records.map((record, index) => (
+                            {filteredRecords.map((record, index) => (
                                 <tr key={record.id}>
 
                                     <td>{index + 1}</td>
@@ -282,7 +377,7 @@ function Attendance({ getAttendance, attendance }) {
 
                     {/* Mobile Cards */}
                     <div className="faculty-cards">
-                        {records.map((record, index) => (
+                        {filteredRecords.map((record, index) => (
                             <div
                                 className="faculty-card"
                                 key={record.id}
@@ -383,6 +478,89 @@ function Attendance({ getAttendance, attendance }) {
             )}
         </div>
       </div>
+
+       <Modal
+            open={filterVisible}
+            onClose={closeModal}
+            title="Filter Attendance"
+        >
+            <div className="faculty-form-group">
+                <Dropdown
+                    label="Status"
+                    placeholder="Select Status"
+                    value={filterDraft.status}
+                    onSelect={(value) => updateFilter("status", value)}
+                    options={[
+                        { label: "All", value: "All" },
+                        { label: "Present", value: "Present" },
+                        { label: "Absent", value: "Absent" },
+                    ]}
+                />
+            </div>
+
+            <div className="faculty-form-group">
+                <Dropdown
+                    label="Course"
+                    placeholder="Select Course"
+                    value={filterDraft.course}
+                    onSelect={(value) => updateFilter("course", value)}
+                    options={reg_courses.map((reg_course) => ({
+                        value: String(reg_course.course_code),
+                        label: reg_course.course_code,
+                    }))}
+                />
+            </div>
+
+            <div className="faculty-form-group">
+                <Dropdown
+                    label="Level"
+                    placeholder="Select Level"
+                    value={filterDraft.level}
+                    onSelect={(value) => updateFilter("level", value)}
+                    options={levels.map((level) => ({
+                        value: String(level.name),
+                        label: level.name,
+                    }))}
+                />
+            </div>
+
+           <div className="attendance-filter-date">
+                <label htmlFor="attendance-date">
+                    Date
+                </label>
+
+                <div className="attendance-date-input">
+                    <CalendarCheck size={18} />
+
+                    <input
+                        id="attendance-date"
+                        type="date"
+                        value={filterDraft.date}
+                        onChange={(e) =>
+                            updateFilter("date", e.target.value)
+                        }
+                    />
+                </div>
+            </div>
+
+            <div className="faculty-modal-actions">
+                <button
+                    type="button"
+                    className="faculty-cancel-button"
+                    onClick={closeModal}
+                >
+                    Reset
+                </button>
+
+                <button
+                    type="submit"
+                    className="faculty-save-button"
+                    onClick={applyFilters}
+                >
+                    Apply
+                </button>
+            </div>
+        </Modal>
     </div>
   );
 }

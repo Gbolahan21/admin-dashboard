@@ -2,3 +2,4 @@ export const STUDENT = "STUDENT";
 export const STUDENT_CREATE = "STUDENT_CREATE";
 export const STUDENT_UPDATE = "STUDENT_UPDATE";
 export const STUDENT_DELETE = "STUDENT_DELETE";
+export const REG_COURSES = "REG_COURSES";
