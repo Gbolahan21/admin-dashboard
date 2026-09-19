@@ -3,8 +3,8 @@ import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import Dashboard from "./Dashboard";
 import Student from "./Student";
-import AttendanceToday from "./AttendanceToday";
-import AttendanceAnalytics from "./AttendanceAnalytics";
+import Attendance from "./Attendance";
+import Setting from "./Setting";
 import Report from "./Report";
 import Faculty from "./Faculty";
 import Department from "./Department";
@@ -43,14 +43,14 @@ const baseRoutes = {
       path: "/student",
     },
     {
-      name: "Today's Attendance",
-      component: AttendanceToday,
-      path: "/attendance/today",
+      name: "Attendance",
+      component: Attendance,
+      path: "/attendance",
     },
     {
-      name: "Attendance Analytics",
-      component: AttendanceAnalytics,
-      path: "/attendance/analytics",
+      name: "Setting",
+      component: Setting,
+      path: "/setting",
     },
     {
       name: "Report",

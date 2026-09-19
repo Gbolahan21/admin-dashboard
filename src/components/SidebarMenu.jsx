@@ -12,7 +12,7 @@ import {
     FileText,
     Settings,
     X,
-    LogOut
+    LogOut,
 } from "lucide-react";
 import moh from "../assets/images/moh.png";
 
@@ -191,9 +191,9 @@ function SidebarMenu({ navigate, sidebarOpen, closeSidebar, openLogoutModal }) {
                     <button
                         type="button"
                         className={`sidebar-item ${
-                            isActive("/settings") ? "active" : ""
+                            isActive("/setting") ? "active" : ""
                         }`}
-                        onClick={() => navigate("/settings")}
+                        onClick={() => navigate("/setting")}
                     >
                         <Settings size={20} />
                         <span>Settings</span>

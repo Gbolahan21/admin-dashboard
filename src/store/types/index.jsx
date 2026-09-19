@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 export * from './admin';
+export * from './attendance';
 export * from './dashboard';
 export * from './faculty';
 export * from './department';

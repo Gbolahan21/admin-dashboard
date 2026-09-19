@@ -197,7 +197,7 @@
         padding: 0;
     }
 
-    .faculty-table {
+    .faculty-table, .attendance-table {
         display: none;
     }
 
@@ -212,7 +212,7 @@
         display: flex;
         flex-direction: column;
         gap: 14px;
-                max-height: calc(100vh - 150px);
+        max-height: calc(100vh - 150px);
         overflow-y: auto;
     }
 
@@ -226,6 +226,10 @@
 
     .faculty-card:last-child {
         margin-bottom: 20px;
+    }
+
+    .faculty-card:last-child, .attendance-table-wrapper {
+        margin-bottom: 0;
     }
 
     .faculty-card-header {
@@ -305,4 +309,30 @@
     .faculty-card-actions .faculty-action-button {
         flex: 1;
     }
-}
+
+    .attendance-page {
+        padding: 20px 15px;
+    }
+
+    .attendance-header h1 {
+        font-size: 23px;
+    }
+
+    .attendance-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .attendance-section {
+        background: none;
+        border: none;
+        border-radius: 0;
+    }
+
+    .attendance-section-header {
+        padding: 18px 0;
+    }
+
+    .attendance-toolbar {
+        padding: 0 0 20px;
+    }
+}  

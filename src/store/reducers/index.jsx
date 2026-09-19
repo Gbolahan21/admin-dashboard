@@ -1,6 +1,7 @@
 import {combineReducers} from 'redux';
 
 import admin from './admin';
+import attendance from './attendance';
 import dashboard from './dashboard';
 import faculty from './faculty';
 import department from './department';
@@ -11,6 +12,7 @@ import student from './student';
 
 export default combineReducers({
   admin,
+  attendance,
   dashboard,
   faculty,
   department,
