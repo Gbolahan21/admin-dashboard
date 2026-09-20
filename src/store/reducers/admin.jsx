@@ -15,6 +15,8 @@ export const initialState = {
   firstname: '',
   lastname: '',
   token: '',
+  role: '',
+  user: null,
   loading: [],
   authenticated: false,
   initialized: false,
@@ -36,8 +38,9 @@ export default function (state = initialState, action) {
     case SIGNIN:
       return {
         ...state,
-        ...payload.admin,
+        ...payload.user,
         token: payload.token,
+        role: payload.role,
         authenticated: true,
         initialized: true,
       };
@@ -50,29 +53,12 @@ export default function (state = initialState, action) {
     case LOAD:
       return {
         ...state,
-        ...payload.admin,
-        // token: payload.token,
+        ...payload.user,
+        token: state.token,
+        role: payload.role,
         authenticated: true,
         initialized: true,
       };
-
-    // case FACULTIES:
-    //   return {
-    //     ...state,
-    //     faculties: payload.faculties,
-    //   };
-    
-    // case DEPARTMENTS:
-    //   return {
-    //     ...state,
-    //     departments: payload.departments,
-    //   };
-
-    // case LEVELS:
-    //   return {
-    //     ...state,
-    //     levels: payload.levels,
-    //   };
 
     case AUTH_INITIALIZED:
       return {

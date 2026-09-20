@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 import {
     LayoutDashboard,
     Users,
@@ -17,8 +18,9 @@ import {
 import moh from "../assets/images/moh.png";
 
 function SidebarMenu({ navigate, sidebarOpen, closeSidebar, openLogoutModal }) {
-
     const location = useLocation();
+    const role = useSelector((state) => state.admin?.role);
+    const isAdmin = role === "admin";
     const isActive = (path) => {
         return location.pathname === path;
     };
@@ -90,73 +92,71 @@ function SidebarMenu({ navigate, sidebarOpen, closeSidebar, openLogoutModal }) {
 
 
                 {/* Academic Management */}
-                <div className="sidebar-section">
-
-                    <p className="sidebar-section-title">
-                        Academic Management
-                    </p>
-
-
-                    <button
-                        type="button"
-                        className={`sidebar-item ${
-                            isActive("/faculty") ? "active" : ""
-                        }`}
-                        onClick={() => navigate("/faculty")}
-                    >
-                        <GraduationCap size={20} />
-                        <span>Faculty</span>
-                    </button>
+                {isAdmin && (
+                    <div className="sidebar-section">
+                        <p className="sidebar-section-title">
+                            Academic Management
+                        </p>
+                        <button
+                            type="button"
+                            className={`sidebar-item ${
+                                isActive("/faculty") ? "active" : ""
+                            }`}
+                            onClick={() => navigate("/faculty")}
+                        >
+                            <GraduationCap size={20} />
+                            <span>Faculty</span>
+                        </button>
 
 
-                    <button
-                        type="button"
-                        className={`sidebar-item ${
-                            isActive("/department") ? "active" : ""
-                        }`}
-                        onClick={() => navigate("/department")}
-                    >
-                        <Building2 size={20} />
-                        <span>Department</span>
-                    </button>
+                        <button
+                            type="button"
+                            className={`sidebar-item ${
+                                isActive("/department") ? "active" : ""
+                            }`}
+                            onClick={() => navigate("/department")}
+                        >
+                            <Building2 size={20} />
+                            <span>Department</span>
+                        </button>
 
 
-                    <button
-                        type="button"
-                        className={`sidebar-item ${
-                            isActive("/level") ? "active" : ""
-                        }`}
-                        onClick={() => navigate("/level")}
-                    >
-                        <Layers size={20} />
-                        <span>Level</span>
-                    </button>
+                        <button
+                            type="button"
+                            className={`sidebar-item ${
+                                isActive("/level") ? "active" : ""
+                            }`}
+                            onClick={() => navigate("/level")}
+                        >
+                            <Layers size={20} />
+                            <span>Level</span>
+                        </button>
 
 
-                    <button
-                        type="button"
-                        className={`sidebar-item ${
-                            isActive("/semester") ? "active" : ""
-                        }`}
-                        onClick={() => navigate("/semester")}
-                    >
-                        <CalendarDays size={20} />
-                        <span>Semester</span>
-                    </button>
+                        <button
+                            type="button"
+                            className={`sidebar-item ${
+                                isActive("/semester") ? "active" : ""
+                            }`}
+                            onClick={() => navigate("/semester")}
+                        >
+                            <CalendarDays size={20} />
+                            <span>Semester</span>
+                        </button>
 
 
-                    <button
-                        type="button"
-                        className={`sidebar-item ${
-                            isActive("/course") ? "active" : ""
-                        }`}
-                        onClick={() => navigate("/course")}
-                    >
-                        <BookOpen size={20} />
-                        <span>Courses</span>
-                    </button>
-
-                </div>
+                        <button
+                            type="button"
+                            className={`sidebar-item ${
+                                isActive("/course") ? "active" : ""
+                            }`}
+                            onClick={() => navigate("/course")}
+                        >
+                            <BookOpen size={20} />
+                            <span>Courses</span>
+                        </button>
+                    </div>
+                )}
 
 
                 <div className="sidebar-section">

@@ -5,6 +5,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import SidebarMenu from "./SidebarMenu";
 import Modal from "./Modal";
 import Button from "./Button";
+import * as Helpers from '../helpers'
 
 function Layout() {
     const navigate = useNavigate();
@@ -25,10 +26,11 @@ function Layout() {
     };
 
     const handleLogout = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("admin");
+        const role = localStorage.getItem("role");
 
-        navigate("/signin");
+        Helpers.token.remove();
+
+        navigate(`/signin?role=${role || "lecturer"}`);
     };
 
     return (

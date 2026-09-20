@@ -57,7 +57,14 @@ const connectedRoutes = {
 
 class Routes extends Component {
     componentDidMount() {
-        const token = localStorage.getItem("token");
+        const role = localStorage.getItem("role");
+
+        const tokenKey =
+            role === "admin"
+                ? "adminToken"
+                : "lecturerToken";
+
+        const token = localStorage.getItem(tokenKey);
 
         if (token) {
             this.props.load();

@@ -11,6 +11,7 @@ import Department from "./Department";
 import Level from "./Level";
 import Course from "./Course";
 import Semester from "./Semester";
+import NotFound from "./NotFound";
 
 const baseRoutes = {
   public: [
@@ -81,6 +82,11 @@ const baseRoutes = {
       name: "Semester",
       component: Semester,
       path: "/semester",
+    },
+    {
+      name: "NotFound",
+      component: NotFound,
+      path: "/404",
     },
   ],
 };

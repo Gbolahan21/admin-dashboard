@@ -1,22 +1,47 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
+import * as Helpers from "../helpers";
 import Loading from "./Loading";
 
+const adminOnlyRoutes = [
+    "/faculty",
+    "/department",
+    "/level",
+    "/semester",
+    "/course",
+];
+
 function PrivateRoute({ admin, children }) {
-    const { authenticated, initialized } = admin;
+    const location = useLocation();
 
-    const token = localStorage.getItem("token");
+    const {authenticated, initialized, role} = admin;
 
-    // Still checking authentication
+    const token = Helpers.token.get();
+
+    const isAdminOnlyRoute = adminOnlyRoutes.includes(
+        location.pathname
+    );
+
     if (!initialized && token) {
         return <Loading size="big" />;
     }
 
-    // No token = definitely not authenticated
     if (!token || !authenticated) {
-        return <Navigate to="/signin" replace />;
+        const role = localStorage.getItem("role");
+
+        return (
+            <Navigate
+                to={`/signin?role=${role || "lecturer"}`}
+                replace
+            />
+        );
+    };
+    
+
+    if (isAdminOnlyRoute && role !== "admin") {
+       return <Navigate to="/404" replace />;
     }
 
-    return children;
+    return children || <Outlet />;
 }
 
 export default PrivateRoute;

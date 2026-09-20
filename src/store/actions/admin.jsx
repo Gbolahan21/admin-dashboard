@@ -8,24 +8,20 @@ import {
   LOAD,
 } from '../types';
 
-export const signup = (firstname, lastname, email, title, password, error, success) => 
-  Helpers.api(
-  '/admin/signup',
-  'POST',
-  {
-    firstname,
-    lastname,
-    email,
-    title,
-    password,
-  },
-  { error, success },
-  { error: ERROR, loading: LOADING, responder: SIGNUP }
-);
+export const signup = (data, error, success) => {
+  const endpoint = data.role === 'admin' ? '/auth/admin/register' : '/auth/lecturer/register';
+  return Helpers.api(
+    endpoint,
+    'POST',
+    data,
+    { error, success },
+    { error: ERROR, loading: LOADING, responder: SIGNUP }
+  );
+};
 
 export const signin = (email, password, error, success) =>
   Helpers.api(
-    '/admin/signin',
+    '/auth/login',
     'POST',
     { email, password },
     { error, success },
@@ -34,7 +30,7 @@ export const signin = (email, password, error, success) =>
 
 export const load = (error, success) =>
   Helpers.api(
-    '/admin/load',
+    '/auth/load',
     'GET',
     {},
     { error, success },

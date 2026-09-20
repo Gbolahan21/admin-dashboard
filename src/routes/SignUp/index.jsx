@@ -1,5 +1,5 @@
 import {useState, useEffect} from "react";
-import {Link} from "react-router-dom";
+import {Link, useSearchParams} from "react-router-dom";
 import {Button, Dropdown} from "../../components";
 import { Eye, EyeOff, ArrowLeft, UserPlus } from "lucide-react";
 import * as Helpers from '../../helpers';
@@ -13,10 +13,16 @@ function SignUp({ signup, navigate }) {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [staffId, setStaffId] = useState('');
+  const [searchParams] = useSearchParams();
+
+  const role = searchParams.get("role") || "lecturer";
+
+  const isLecturer = role === "lecturer";
 
   useEffect(() => {
-    document.title = 'SignUp | Moh';
-  }, []);
+    document.title = `${isLecturer ? "Lecturer" : "Admin"} SignUp | Moh`;
+  }, [isLecturer]);
 
   const handleRegister = () => {
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -34,13 +40,15 @@ function SignUp({ signup, navigate }) {
       return;
     }
 
-    signup(
-      firstname.trim(),
-      lastname.trim(),
-      email.trim().toLowerCase(),
-      title.trim(),
+    signup({
+      firstname: firstname.trim(),
+      lastname: lastname.trim(),
+      email: email.trim().toLowerCase(),
+      title: isLecturer ? null : title,
+      staff_id: isLecturer ? staffId.trim() : null,
       password,
-
+      role
+    },
       // ERROR CALLBACK
       (error) => {
         Helpers.notification.error(error?.error || error?.message || "Registration failed");
@@ -52,17 +60,18 @@ function SignUp({ signup, navigate }) {
         setLastName("");
         setEmail("");
         setTitle("");
+        setStaffId("");
         setPassword("");
         setConfirmPassword("");
 
         Helpers.notification.success(response?.message);
 
-        navigate('/signin');
+        navigate(`/signin?role=${role}`);
       }
     )
   };
 
-  const details = !firstname || !lastname || !email || !title || !password || !confirmPassword;
+  const details = !firstname || !lastname || !email || (!isLecturer && !title) || (isLecturer && !staffId) || !password || !confirmPassword;
 
   const titleOptions = [
     { label: "Mr", value: "Mr" },
@@ -77,7 +86,7 @@ function SignUp({ signup, navigate }) {
             <ArrowLeft size={20} />
           </Link>
 
-          <p className='signup-text'>SignUp</p>
+          <p className='signup-text'>{isLecturer ? "Lecturer Sign Up" : "Admin Sign Up"}</p>
 
           <input
             className='signup-input'
@@ -106,13 +115,23 @@ function SignUp({ signup, navigate }) {
             onChange={(e) => setEmail(e.target.value)}
           />
 
-          <Dropdown
-            // label="Title"
-            placeholder="Select Title"
-            value={title}
-            onSelect={setTitle}
-            options={titleOptions}
-          />
+          {!isLecturer && (
+            <Dropdown
+              placeholder="Select Title"
+              value={title}
+              onSelect={setTitle}
+              options={titleOptions}
+            />
+          )}
+
+          {isLecturer && (
+            <input
+              className="signup-input"
+              placeholder="Enter your staff ID"
+              value={staffId}
+              onChange={(e) => setStaffId(e.target.value)}
+            />
+          )}
 
           <div className='signup-inputContainer'>
             <input
@@ -219,7 +238,7 @@ function SignUp({ signup, navigate }) {
 
           <p className='signup-footerText'>
             Already have an account.{" "}
-            <Link to='/signin' className='signup-link'>Login</Link>
+            <Link to={`/signin?role=${role}`} className='signup-link'>Login</Link>
           </p>
         </div>
       </div>

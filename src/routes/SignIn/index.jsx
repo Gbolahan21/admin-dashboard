@@ -1,30 +1,48 @@
 import {useState, useEffect} from "react";
-import {Link} from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import {Button} from "../../components";
 import { Eye, EyeOff, ArrowLeft, LogIn } from "lucide-react";
 import * as Helpers from '../../helpers';
 
 function SignIn({ signin, navigate }) {
+  const [searchParams] = useSearchParams();
+  const role = searchParams.get("role") || "lecturer";
+  const isLecturer = role === "lecturer";
   const [email, setEmail] = useState(() => {
-    return localStorage.getItem("savedEmail") || "";
+    const role = new URLSearchParams(window.location.search).get("role") || "lecturer";
+    const emailKey =
+      role === "admin"
+        ? "adminSavedEmail"
+        : "lecturerSavedEmail";
+    return localStorage.getItem(emailKey) || "";
   });
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(() => {
-    return Boolean(localStorage.getItem("savedEmail"));
-  }); 
+    const role = new URLSearchParams(window.location.search).get("role") || "lecturer";
+    const emailKey =
+      role === "admin"
+        ? "adminSavedEmail"
+        : "lecturerSavedEmail";
+    return Boolean(localStorage.getItem(emailKey));
+  });
 
   useEffect(() => {
-    document.title = 'SignIn | Moh';
-  }, []);
+    document.title = `${isLecturer ? "Lecturer" : "Admin"} SignIn | Moh`;
+  }, [isLecturer]);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const tokenKey =
+      role === "admin"
+        ? "adminToken"
+        : "lecturerToken";
+
+    const token = localStorage.getItem(tokenKey);
 
     if (token) {
-      navigate('/dashboard');
+      navigate("/dashboard");
     }
-  }, [navigate]);
+  }, [navigate, role]);
 
   const handleLogin = () => {
     signin(
@@ -38,14 +56,34 @@ function SignIn({ signin, navigate }) {
 
       // Success callback
       (response) => {
-        localStorage.setItem("admin", JSON.stringify(response.admin));
-        if (rememberMe) {
-          localStorage.setItem("token", response.token);
+        const userRole = response.role;
 
-          localStorage.setItem("savedEmail", email.trim().toLowerCase());
+        if (!userRole) {
+          Helpers.notification.error("Login response did not contain a role.");
+          return;
+        }
+
+        if (userRole !== role) {
+          Helpers.notification.error("The selected account role does not match the authenticated account.");
+          return;
+        }
+
+        const tokenKey =
+        userRole === "admin"
+          ? "adminToken"
+          : "lecturerToken";
+
+        const emailKey =
+          userRole === "admin"
+            ? "adminSavedEmail"
+            : "lecturerSavedEmail";
+
+        localStorage.setItem("role", userRole);
+        localStorage.setItem(tokenKey, response.token);
+        if (rememberMe) {
+          localStorage.setItem(emailKey, email.trim().toLowerCase());
         } else {
-          localStorage.removeItem("token");
-          localStorage.removeItem("savedEmail");
+          localStorage.removeItem(emailKey);
         }
 
         Helpers.notification.success(response.message)
@@ -113,7 +151,7 @@ function SignIn({ signin, navigate }) {
 
           <p className='signup-footerText'>
             Don't have an account.{" "}
-            <Link to='/signup' className='signup-link'>Register</Link>
+            <Link  to={`/signup?role=${role}`} className='signup-link'>Register</Link>
           </p>
         </div>
       </div>

@@ -4,6 +4,3 @@ export const SIGNIN = 'SIGNIN';
 export const SIGNUP = 'SIGNUP';
 export const AUTH_INITIALIZED = 'AUTH_INITIALIZED';
 export const LOAD = 'LOAD';
-// export const FACULTIES = 'FACULTIES';
-// export const DEPARTMENTS = 'DEPARTMENTS';
-// export const LEVELS = 'LEVELS';

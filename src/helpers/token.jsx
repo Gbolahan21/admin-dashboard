@@ -6,41 +6,85 @@ const text =
   ' current browser is not fully supported. \n' +
   ' If the issue persists contact support@carrotccredit.com';
 
+const getTokenKey = (type) => {
+  if (type) {
+    return type;
+  }
+
+  const role = window.localStorage.getItem('role');
+
+  if (role === 'admin') {
+    return 'adminToken';
+  }
+
+  if (role === 'lecturer') {
+    return 'lecturerToken';
+  }
+
+  return 'token';
+};
+
 const token = {
   get: (type) => {
     try {
-      const item = window.localStorage.getItem(type || 'token');
-      return item;
+      const key = getTokenKey(type);
+      return window.localStorage.getItem(key);
     } catch {
       try {
-        const item = Cookies.get(type || 'token');
-        return item;
+        const key = getTokenKey(type);
+        return Cookies.get(key);
       } catch {
         return notification.error(text);
       }
     }
   },
+
   remove: (type) => {
     try {
-      window.localStorage.removeItem(type || 'token');
+      if (type) {
+        window.localStorage.removeItem(type);
+        Cookies.remove(type);
+        return;
+      }
+
+      // Remove both role-specific tokens
+      window.localStorage.removeItem('adminToken');
+      window.localStorage.removeItem('lecturerToken');
+
+      Cookies.remove('adminToken');
+      Cookies.remove('lecturerToken');
+
+      // Remove authentication role
+      window.localStorage.removeItem('role');
+
     } catch {
       try {
-        Cookies.remove(type || 'token');
+        if (type) {
+          Cookies.remove(type);
+        } else {
+          Cookies.remove('adminToken');
+          Cookies.remove('lecturerToken');
+          Cookies.remove('role');
+        }
       } catch {
         notification.error(text);
       }
     }
   },
+
   set: (newToken, type) => {
     try {
-      window.localStorage.setItem(type || 'token', newToken);
+      const key = getTokenKey(type);
+      window.localStorage.setItem(key, newToken);
     } catch {
       try {
-        Cookies.set(type || 'token', newToken);
+        const key = getTokenKey(type);
+        Cookies.set(key, newToken);
       } catch {
         notification.error(text);
       }
     }
   },
 };
+
 export default token;
