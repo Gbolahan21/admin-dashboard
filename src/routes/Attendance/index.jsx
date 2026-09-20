@@ -4,6 +4,8 @@ import {
   Users,
   UserCheck,
   CalendarX,
+  Eye,
+  MoreVertical
 } from "lucide-react";
 import {Button, Modal, Dropdown} from '../../components'
 
@@ -11,6 +13,10 @@ function Attendance({ getAttendance, attendance, level, student, getRegCourses, 
   const { reg_courses } = student;
   const { levels } = level;
   const [search, setSearch] = useState("");
+  const [filterVisible, setFilterVisible] = useState(false);
+  const [selectedAttendance, setSelectedAttendance] = useState(null);
+  const [attendanceViewVisible, setAttendanceViewVisible] = useState(false);
+  const [actionVisible, setActionVisible] = useState(false);
   const [filterDraft, setFilterDraft] = useState({
     status: "",
     level: "",
@@ -24,7 +30,6 @@ function Attendance({ getAttendance, attendance, level, student, getRegCourses, 
     course: "",
     date: "",
   });
-  const [filterVisible, setFilterVisible] = useState(false);
 
   useEffect(() => {
     document.title = "Attendance | Moh";
@@ -106,6 +111,26 @@ function Attendance({ getAttendance, attendance, level, student, getRegCourses, 
   const openModal = useCallback(() => {
     setFilterVisible(true);
   }, []);
+
+  const openAttendanceView = (record) => {
+    setSelectedAttendance(record);
+    setAttendanceViewVisible(true);
+  };
+
+  const closeAttendanceView = () => {
+    setSelectedAttendance(null);
+    setAttendanceViewVisible(false);
+  };
+
+  const openActionModal = (record) => {
+    setSelectedAttendance(record);
+    setActionVisible(true);
+  };
+
+  const closeActionModal = () => {
+    setActionVisible(false);
+    setSelectedAttendance(null);
+  };
 
   const handleSearch = useCallback((e) => {
     setSearch(e.target.value)
@@ -251,7 +276,7 @@ function Attendance({ getAttendance, attendance, level, student, getRegCourses, 
         </div>
 
         {/* Table */}
-        <div className="attendance-table-wrapper">
+        <div className="faculty-table-container">
             {records.length === 0 ? (
                 <div className="faculty-empty">
                     <div className="attendance-empty">
@@ -284,20 +309,16 @@ function Attendance({ getAttendance, attendance, level, student, getRegCourses, 
             ) : (
                 <>
                     {/* Desktop */}
-                    <table className="attendance-table">
+                    <table className="faculty-table">
                         <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Matric No</th>
-                            <th>Course Code</th>
-                            <th>Course Title</th>
-                            <th>Course Unit</th>
-                            <th>Level</th>
-                            <th>Date</th>
-                            <th>Check In</th>
-                            <th>Check Out</th>
-                            <th>Status</th>
-                        </tr>
+                            <tr>
+                                <th>#</th>
+                                <th>Matric No</th>
+                                <th>Course Code</th>
+                                <th>Level</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
                         </thead>
 
                         <tbody>
@@ -307,69 +328,41 @@ function Attendance({ getAttendance, attendance, level, student, getRegCourses, 
                                     <td>{index + 1}</td>
 
                                     <td>
-                                        <div className="attendance-student">
-                                            <div>
-                                            <strong>
-                                                {record.matricNo}
-                                            </strong>
-                                            </div>
-                                        </div>
+                                        {record.matricNo}
                                     </td>
 
                                     <td>
-                                        <div className="attendance-course">
-                                            <strong>
-                                                {record.course_code}
-                                            </strong>
-                                        </div>
+                                        {record.course_code}
                                     </td>
 
                                     <td>
-                                        <div className="attendance-course">
-                                            <span>
-                                                {record.course_title}
-                                            </span>
-                                        </div>
-                                    </td>
-
-                                        <td>
-                                        <div className="attendance-course" style={{textAlign: "center"}}>
-                                            <span>
-                                                {record.course_unit}
-                                            </span>
-                                        </div>
+                                        {record.level_name}
                                     </td>
 
                                     <td>
-                                        <div className="attendance-course">
-                                            <span>
-                                                {record.level_name}
-                                            </span>
-                                        </div>
-                                    </td>
+                                        {record.status || "Unknown"}
+                                    </td>  
 
-                                    <td>
-                                        {formatDate(record.attendance_date)}
-                                    </td>
-
-                                    <td>
-                                        {formatTime(record.check_in)}
-                                    </td>
-
-                                    <td>
-                                        {formatTime(record.check_out)}
-                                    </td>
-
-                                    <td>
-                                        <span
-                                            className={`attendance-status ${
-                                                record.status?.toLowerCase() || ""
-                                            }`}
+                                    {/* <td>
+                                        <button
+                                            type="button"
+                                            className="faculty-action-button"
+                                            onClick={() => openAttendanceView(record)}
                                         >
-                                            {record.status || "Unknown"}
-                                        </span>
+                                            <Eye size={16} />
+                                            View
+                                        </button>
+                                    </td> */}
+                                    <td>
+                                        <button
+                                            type="button"
+                                            className="attendance-action-button"
+                                            onClick={() => openActionModal(record)}
+                                            aria-label="Attendance actions"
+                                        >
+                                            <MoreVertical size={19} />
+                                        </button>
                                     </td>
-
                                 </tr>
                             ))}
                         </tbody>
@@ -404,60 +397,10 @@ function Attendance({ getAttendance, attendance, level, student, getRegCourses, 
 
                                 <div className="faculty-card-details">
                                     <div className="faculty-card-detail">
-                                        <span>Course Title</span>
-
-                                        <strong>
-                                            {record.course_title}
-                                        </strong>
-                                    </div>
-                                </div>
-
-                                <div className="faculty-card-details">
-                                    <div className="faculty-card-detail">
-                                        <span>Course Unit</span>
-
-                                        <strong>
-                                            {record.course_unit}
-                                        </strong>
-                                    </div>
-                                </div>
-
-                                <div className="faculty-card-details">
-                                    <div className="faculty-card-detail">
                                         <span>Level</span>
 
                                         <strong>
                                             {record.level_name}
-                                        </strong>
-                                    </div>
-                                </div>
-
-                                <div className="faculty-card-details">
-                                    <div className="faculty-card-detail">
-                                        <span>Date</span>
-
-                                        <strong>
-                                            {formatDate(record.attendance_date)}
-                                        </strong>
-                                    </div>
-                                </div>
-
-                                <div className="faculty-card-details">
-                                    <div className="faculty-card-detail">
-                                        <span>Check In</span>
-
-                                        <strong>
-                                            {formatTime(record.check_in)}
-                                        </strong>
-                                    </div>
-                                </div>
-
-                                <div className="faculty-card-details">
-                                    <div className="faculty-card-detail">
-                                        <span>Check Out</span>
-
-                                        <strong>
-                                            {formatTime(record.check_out)}
                                         </strong>
                                     </div>
                                 </div>
@@ -471,6 +414,17 @@ function Attendance({ getAttendance, attendance, level, student, getRegCourses, 
                                         </strong>
                                     </div>
                                 </div>
+
+                                <div className="faculty-card-actions">
+                                    <button
+                                        type="button"
+                                        className="faculty-action-button"
+                                        onClick={() => openAttendanceView(record)}
+                                    >
+                                        <Eye size={16} />
+                                        View
+                                    </button>
+                                </div>
                             </div>
                         ))}
                     </div>
@@ -479,7 +433,8 @@ function Attendance({ getAttendance, attendance, level, student, getRegCourses, 
         </div>
       </div>
 
-       <Modal
+      {/* Filter Modal */}
+      <Modal
             open={filterVisible}
             onClose={closeModal}
             title="Filter Attendance"
@@ -560,7 +515,180 @@ function Attendance({ getAttendance, attendance, level, student, getRegCourses, 
                     Apply
                 </button>
             </div>
-        </Modal>
+      </Modal>
+
+      {/* View Attendance Modal */}
+      <Modal
+        open={attendanceViewVisible}
+        onClose={closeAttendanceView}
+        title="Student Details"
+      >
+        {selectedAttendance && (
+            <div className="student-details">
+                {/* Student Information */}
+                <div className="student-details-section">
+
+                    <h3>Student Information</h3>
+
+                    <div className="student-details-grid">
+
+                        <div className="student-detail">
+                            <span>Matric No</span>
+                            <strong>
+                                {selectedAttendance.matricNo || "N/A"}
+                            </strong>
+                        </div>
+
+                        <div className="student-detail">
+                            <span>Level</span>
+                            <strong>
+                                {selectedAttendance.level_name || "N/A"}
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+
+
+                {/* Course Information */}
+                <div className="student-details-section">
+
+                    <h3>Course Information</h3>
+
+                    <div className="student-details-grid">
+
+                        <div className="student-detail">
+                            <span>Course Code</span>
+                            <strong>
+                                {selectedAttendance.course_code || "N/A"}
+                            </strong>
+                        </div>
+
+                        <div className="student-detail">
+                            <span>Course Title</span>
+                            <strong>
+                                {selectedAttendance.course_title || "N/A"}
+                            </strong>
+                        </div>
+
+                        <div className="student-detail">
+                            <span>Course Unit</span>
+                            <strong>
+                                {selectedAttendance.course_unit || "N/A"}
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+
+
+                {/* Attendance Information */}
+                <div className="student-details-section">
+
+                    <h3>Attendance Information</h3>
+
+                    <div className="student-details-grid">
+
+                        <div className="student-detail">
+                            <span>Status</span>
+                            <strong>
+                                {selectedAttendance.status || "N/A"}
+                            </strong>
+                        </div>
+
+                        <div className="student-detail">
+                            <span>Check In</span>
+                            <strong>
+                                {formatTime(selectedAttendance.check_in) || "N/A"}
+                            </strong>
+                        </div>
+
+                        <div className="student-detail">
+                            <span>Check Out</span>
+                            <strong>
+                                {formatTime(selectedAttendance.check_out) || "N/A"}
+                            </strong>
+                        </div>
+
+                        <div className="student-detail">
+                            <span>Date</span>
+                            <strong>
+                                {formatDate(selectedAttendance.attendance_date) || "N/A"}
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )}
+      </Modal>
+
+      {/* Action Modal */}
+      <Modal
+        open={actionVisible}
+        onClose={closeActionModal}
+        title="Attendance Actions"
+      >
+        {selectedAttendance && (
+            <div className="attendance-action-modal">
+
+            <div className="attendance-action-record">
+                <strong>
+                {selectedAttendance.matricNo}
+                </strong>
+
+                <span>
+                {selectedAttendance.course_code} -{" "}
+                {selectedAttendance.course_title}
+                </span>
+            </div>
+
+            <div className="attendance-action-list">
+
+                {/* View */}
+                <button
+                    type="button"
+                    className="attendance-action-item"
+                    onClick={() => {
+                        closeActionModal();
+                        openAttendanceView(selectedAttendance);
+                    }}
+                >
+                <div className="attendance-action-item-icon">
+                    <CalendarCheck size={18} />
+                </div>
+
+                <div>
+                    <strong>View Attendance</strong>
+
+                    <span>
+                        View complete attendance details
+                    </span>
+                </div>
+                </button>
+
+                {/* Edit - we'll implement this next */}
+                {/* <button
+                type="button"
+                className="attendance-action-item"
+                onClick={() => {
+                    closeActionModal();
+                    // Edit attendance will be added here
+                }}
+                >
+                <div className="attendance-action-item-icon">
+                    <UserCheck size={18} />
+                </div>
+
+                <div>
+                    <strong>Edit Attendance</strong>
+
+                    <span>
+                    Update attendance information
+                    </span>
+                </div>
+                </button> */}
+            </div>
+            </div>
+        )}
+      </Modal>
     </div>
   );
 }
