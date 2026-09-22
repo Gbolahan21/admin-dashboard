@@ -6,8 +6,6 @@ const Attendance = ({
     getAttendance, 
     attendance,
     level,
-    student,
-    getRegCourses,
     getLevels,
 }) => {
     const role = admin?.role;
@@ -17,8 +15,6 @@ const Attendance = ({
                 getAttendance={getAttendance}
                 attendance={attendance}
                 level={level}
-                student={student}
-                getRegCourses={getRegCourses}
                 getLevels={getLevels}
             />;
     }

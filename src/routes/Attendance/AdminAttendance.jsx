@@ -9,8 +9,7 @@ import {
 } from "lucide-react";
 import {Button, Modal, Dropdown} from '../../components'
 
-function AdminAttendance({ getAttendance, attendance, level, student, getRegCourses, getLevels }) {
-  const { reg_courses } = student;
+function AdminAttendance({ getAttendance, attendance, level, getLevels }) {
   const { levels } = level;
   const [search, setSearch] = useState("");
   const [filterVisible, setFilterVisible] = useState(false);
@@ -37,13 +36,26 @@ function AdminAttendance({ getAttendance, attendance, level, student, getRegCour
 
   useEffect(() => {
     getAttendance();
-    getRegCourses();
     getLevels();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const records = attendance?.attendance || [];
+
+  const courseOptions = [
+    ...new Map(
+        records
+            .filter((record) => record.course_code)
+            .map((record) => [
+                record.course_code,
+                {
+                    value: String(record.course_code),
+                    label: record.course_code,
+                },
+            ])
+    ).values(),
+  ];
 
   const filteredRecords = records.filter((record) => {
     const searchValue = search.toLowerCase().trim();
@@ -446,7 +458,6 @@ function AdminAttendance({ getAttendance, attendance, level, student, getRegCour
                     value={filterDraft.status}
                     onSelect={(value) => updateFilter("status", value)}
                     options={[
-                        { label: "All", value: "All" },
                         { label: "Present", value: "Present" },
                         { label: "Absent", value: "Absent" },
                     ]}
@@ -459,10 +470,7 @@ function AdminAttendance({ getAttendance, attendance, level, student, getRegCour
                     placeholder="Select Course"
                     value={filterDraft.course}
                     onSelect={(value) => updateFilter("course", value)}
-                    options={reg_courses.map((reg_course) => ({
-                        value: String(reg_course.course_code),
-                        label: reg_course.course_code,
-                    }))}
+                    options={[...courseOptions]}
                 />
             </div>
 
