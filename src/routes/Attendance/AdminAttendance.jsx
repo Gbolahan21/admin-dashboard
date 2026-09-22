@@ -108,17 +108,13 @@ function AdminAttendance({ getAttendance, attendance, level, getLevels }) {
     setSearch("");
     setFilterDraft(emptyFilters);
     setAppliedFilters(emptyFilters);
+    setFilterVisible(false);
   };
 
   const applyFilters = () => {
     setAppliedFilters(filterDraft);
     setFilterVisible(false);
   };
-
-  const closeModal = useCallback(() => {
-    setFilterVisible(false);
-    setFilterDraft(appliedFilters);
-  }, [appliedFilters]);
 
   const openModal = useCallback(() => {
     setFilterVisible(true);
@@ -448,7 +444,7 @@ function AdminAttendance({ getAttendance, attendance, level, getLevels }) {
       {/* Filter Modal */}
       <Modal
             open={filterVisible}
-            onClose={closeModal}
+            onClose={clearFilters}
             title="Filter Attendance"
         >
             <div className="faculty-form-group">
@@ -510,7 +506,7 @@ function AdminAttendance({ getAttendance, attendance, level, getLevels }) {
                 <button
                     type="button"
                     className="faculty-cancel-button"
-                    onClick={closeModal}
+                    onClick={clearFilters}
                 >
                     Reset
                 </button>
