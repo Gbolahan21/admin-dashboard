@@ -78,86 +78,88 @@ function SidebarMenu({ navigate, sidebarOpen, closeSidebar, openLogoutModal }) {
                     </button>
 
 
-                    <button
-                        type="button"
-                        className={`sidebar-item ${
-                            isActive("/student") ? "active" : ""
-                        }`}
-                        onClick={() => navigate("/student")}
-                    >
-                        <Users size={20} />
-                        <span>Students</span>
-                    </button>
+                    {isAdmin && (
+
+                        <button
+                            type="button"
+                            className={`sidebar-item ${
+                                isActive("/student") ? "active" : ""
+                                }`}
+                                onClick={() => navigate("/student")}
+                                >
+                            <Users size={20} />
+                            <span>Students</span>
+                        </button>
+                    )}
                 </div>
 
 
                 {/* Academic Management */}
-                {isAdmin && (
-                    <div className="sidebar-section">
-                        <p className="sidebar-section-title">
-                            Academic Management
-                        </p>
-                        <button
-                            type="button"
-                            className={`sidebar-item ${
-                                isActive("/faculty") ? "active" : ""
-                            }`}
-                            onClick={() => navigate("/faculty")}
-                        >
-                            <GraduationCap size={20} />
-                            <span>Faculty</span>
-                        </button>
+                <div className="sidebar-section">
+                    <p className="sidebar-section-title">
+                        Academic Management
+                    </p>
+                    <button
+                        type="button"
+                        className={`sidebar-item ${
+                            isActive("/course") ? "active" : ""
+                        }`}
+                        onClick={() => navigate("/course")}
+                    >
+                        <BookOpen size={20} />
+                        <span>Courses</span>
+                    </button>
+                    {isAdmin && (
+                        <>
+                            <button
+                                type="button"
+                                className={`sidebar-item ${
+                                    isActive("/faculty") ? "active" : ""
+                                }`}
+                                onClick={() => navigate("/faculty")}
+                            >
+                                <GraduationCap size={20} />
+                                <span>Faculty</span>
+                            </button>
 
 
-                        <button
-                            type="button"
-                            className={`sidebar-item ${
-                                isActive("/department") ? "active" : ""
-                            }`}
-                            onClick={() => navigate("/department")}
-                        >
-                            <Building2 size={20} />
-                            <span>Department</span>
-                        </button>
+                            <button
+                                type="button"
+                                className={`sidebar-item ${
+                                    isActive("/department") ? "active" : ""
+                                }`}
+                                onClick={() => navigate("/department")}
+                            >
+                                <Building2 size={20} />
+                                <span>Department</span>
+                            </button>
 
 
-                        <button
-                            type="button"
-                            className={`sidebar-item ${
-                                isActive("/level") ? "active" : ""
-                            }`}
-                            onClick={() => navigate("/level")}
-                        >
-                            <Layers size={20} />
-                            <span>Level</span>
-                        </button>
+                            <button
+                                type="button"
+                                className={`sidebar-item ${
+                                    isActive("/level") ? "active" : ""
+                                }`}
+                                onClick={() => navigate("/level")}
+                            >
+                                <Layers size={20} />
+                                <span>Level</span>
+                            </button>
 
 
-                        <button
-                            type="button"
-                            className={`sidebar-item ${
-                                isActive("/semester") ? "active" : ""
-                            }`}
-                            onClick={() => navigate("/semester")}
-                        >
-                            <CalendarDays size={20} />
-                            <span>Semester</span>
-                        </button>
-
-
-                        <button
-                            type="button"
-                            className={`sidebar-item ${
-                                isActive("/course") ? "active" : ""
-                            }`}
-                            onClick={() => navigate("/course")}
-                        >
-                            <BookOpen size={20} />
-                            <span>Courses</span>
-                        </button>
-                    </div>
-                )}
-
+                            <button
+                                type="button"
+                                className={`sidebar-item ${
+                                    isActive("/semester") ? "active" : ""
+                                }`}
+                                onClick={() => navigate("/semester")}
+                            >
+                                <CalendarDays size={20} />
+                                <span>Semester</span>
+                            </button>
+                        </>
+                    )}
+                </div>
 
                 <div className="sidebar-section">
 

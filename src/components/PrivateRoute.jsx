@@ -7,7 +7,6 @@ const adminOnlyRoutes = [
     "/department",
     "/level",
     "/semester",
-    "/course",
 ];
 
 function PrivateRoute({ admin, children }) {
