@@ -8,3 +8,4 @@ export * from './level';
 export * from './semester';
 export * from './course';
 export * from './student';
+export * from './lecturer';

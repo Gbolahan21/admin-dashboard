@@ -9,6 +9,7 @@ import level from './level';
 import semester from './semester';
 import course from './course';
 import student from './student';
+import lecturer from './lecturer';
 
 export default combineReducers({
   admin,
@@ -20,4 +21,5 @@ export default combineReducers({
   semester,
   course,
   student,
+  lecturer,
 });

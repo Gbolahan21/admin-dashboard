@@ -14,7 +14,26 @@ const Course = ({
     getDepartments,
     getLevels,
     getSemesters,
+
+    getCurrentSemester,
+    getLecturerFaculties,
+    getDepartmentsByFaculty,
+    getAvailableCourses,
+    getMyCourses,
+    registerCourses,
+    removeCourseRegistration,
+    lecturer,
+    getLecturerLevels,
 }) => {
+    const {
+        currentSemester,
+        faculties,
+        departments,
+        levels,
+        availableCourses,
+        myCourses,
+    } = lecturer || {};
+    
     const role = admin?.role;
 
     if (role === "admin") {
@@ -34,7 +53,22 @@ const Course = ({
     }
 
     if (role === "lecturer") {
-        return <LecturerCourse />;
+        return <LecturerCourse
+                getAvailableCourses={getAvailableCourses}
+                getCurrentSemester={getCurrentSemester}
+                getLecturerFaculties={getLecturerFaculties}
+                getDepartmentsByFaculty={getDepartmentsByFaculty}
+                getMyCourses={getMyCourses}
+                registerCourses={registerCourses}
+                removeCourseRegistration={removeCourseRegistration}
+                currentSemester={currentSemester}
+                faculties={faculties}
+                departments={departments}
+                levels={levels}
+                availableCourses={availableCourses}
+                myCourses={myCourses}
+                getLecturerLevels={getLecturerLevels}
+            />;
     }
 
     return null;

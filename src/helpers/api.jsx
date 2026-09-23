@@ -1,8 +1,6 @@
 import axiosLib from 'axios';
-// import { jwtDecode } from 'jwt-decode';
 
 import token from './token';
-// import authRedirect from './authRedirect';
 
 let axios = axiosLib;
 const api =
@@ -20,7 +18,9 @@ const api =
     });
     axios.defaults.headers.common.Authorization = `Bearer ${token.get()}`;
     axios.defaults.headers.common['Content-Type'] = 'application/json';
-    return axios[method.toLowerCase()](`${import.meta.env.VITE_BASE_URL}${url}`, data)
+    const requestUrl = `${import.meta.env.VITE_BASE_URL}${url}`;
+    const request = method.toLowerCase() === "get" ? axios.get(requestUrl, {params: data}): axios[method.toLowerCase()](requestUrl, data)
+    return request
       .then((res) => {
         dispatch({
           payload: url,
@@ -51,22 +51,6 @@ const api =
         if (typeof error === 'function' && report !== false) {
           error(e.response && e.response.data, dispatch);
         }
-
-        // const redirectToSignin = () => {
-        //   token.remove();
-        //   const returnPath = authRedirect.getCurrentReturnPath();
-        //   window.location = returnPath ? authRedirect.buildSigninPath(returnPath) : '/signin';
-        // };
-
-        // if (e.response && e.response.status === 401) {
-        //   redirectToSignin();
-        // }
-
-        // const userToken = token.get('user:token') && jwtDecode(token.get('user:token'));
-        // const isExpired = userToken?.exp * 1000 < Date.now();
-        // if (isExpired) {
-        //   redirectToSignin();
-        // }
 
         return false;
       });
