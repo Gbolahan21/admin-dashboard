@@ -1,26 +1,15 @@
 import AdminAttendance from "./AdminAttendance";
 import LecturerAttendance from "./LecturerAttendance";
 
-const Attendance = ({
-    admin,
-    getAttendance, 
-    attendance,
-    level,
-    getLevels,
-}) => {
-    const role = admin?.role;
+const Attendance = (props) => {
+    const role = props.admin?.role;
 
     if (role === "admin") {
-        return <AdminAttendance
-                getAttendance={getAttendance}
-                attendance={attendance}
-                level={level}
-                getLevels={getLevels}
-            />;
+        return <AdminAttendance {...props} />;
     }
 
     if (role === "lecturer") {
-        return <LecturerAttendance />;
+        return <LecturerAttendance {...props} />;
     }
 
     return null;
