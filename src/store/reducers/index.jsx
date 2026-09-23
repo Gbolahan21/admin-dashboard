@@ -10,6 +10,7 @@ import semester from './semester';
 import course from './course';
 import student from './student';
 import lecturer from './lecturer';
+import lecturerDashboard from "./lecturerDashboard";
 
 export default combineReducers({
   admin,
@@ -22,4 +23,5 @@ export default combineReducers({
   course,
   student,
   lecturer,
+  lecturerDashboard
 });

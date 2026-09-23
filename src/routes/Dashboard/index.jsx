@@ -1,16 +1,16 @@
 import AdminDashboard from "./AdminDashboard";
 import LecturerDashboard from "./LecturerDashboard";
 
-const Dashboard = ({admin, dashboard, getDashboardStats}) => {
+const Dashboard = (props) => {
     
-    const role = admin?.role;
+    const role = props.admin?.role;
 
     if (role === "admin") {
-        return <AdminDashboard admin={admin} dashboard={dashboard} getDashboardStats={getDashboardStats} />;
+        return <AdminDashboard {...props} />;
     }
 
     if (role === "lecturer") {
-        return <LecturerDashboard />;
+        return <LecturerDashboard {...props} />;
     }
 
     return null;

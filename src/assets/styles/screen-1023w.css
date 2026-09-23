@@ -335,4 +335,101 @@
     .attendance-toolbar {
         padding: 0 0 20px;
     }
+
+    .summary-container {
+        grid-template-columns: 1fr;
+    }
+
+      .dashboard-navbar {
+        padding: 18px 20px;
+    }
+
+    .dashboard-content {
+        padding: 24px 20px 40px;
+    }
+
+    .dashboard-header h1 {
+        font-size: 21px;
+    }
+
+    .summary-card {
+        min-height: 105px;
+    }
+
+    .dashboard-section-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .dashboard-section-header > span {
+        align-self: flex-start;
+    }
+
+    .dashboard-navbar {
+        padding: 16px;
+    }
+
+    .dashboard-content {
+        padding: 20px 16px 35px;
+    }
+
+    .summary-card {
+        padding: 18px;
+    }
+
+    .summary-value {
+        font-size: 23px;
+    }
+
+    .dashboard-section-header {
+        padding: 16px;
+    }
+
+    .dashboard-table th,
+    .dashboard-table td {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .course-filter-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .available-course-list {
+        grid-template-columns: 1fr;
+    }
+
+     .lecturer-course-page .page-header h2 {
+        font-size: 22px;
+    }
+
+    .course-registration-card,
+    .my-courses-card {
+        padding: 18px;
+    }
+
+    .course-semester-card {
+        padding: 17px;
+    }
+
+    .my-course-table {
+        min-width: 750px;
+    }
+
+    .register-course-actions {
+        justify-content: stretch;
+    }
+
+    .register-course-actions button {
+        width: 100%;
+    }
+
+    .remove-course-modal-actions {
+        flex-direction: column;
+    }
+
+    .cancel-btn,
+    .confirm-remove-btn {
+        width: 100%;
+    }
 }  
