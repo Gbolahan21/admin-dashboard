@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Plus, Pencil, Trash } from "lucide-react";
 
 import { Modal, Pagination, Dropdown, Loading } from "../../components";
@@ -59,40 +59,40 @@ function Department({
          // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-   const openEditModal = (department) => {
+    const openEditModal = useCallback((department) => {
         setEditingDepartment(department);
         setDepartmentName(department.name);
         setSelectedFaculty(String(department.faculty_id));
         setModalVisible(true);
-    };
+    }, []);
 
-    const openAddModal = () => {
+    const openAddModal = useCallback(() => {
         setEditingDepartment(null);
         setDepartmentName("");
         setSelectedFaculty("");
         setModalVisible(true);
-    };
+    }, []);
 
-    const closeModal = () => {
+    const closeModal = useCallback(() => {
         if (isSubmitting) return;
 
         setModalVisible(false);
         setDepartmentName("");
         setSelectedFaculty("");
         setEditingDepartment(null);
-    };
+    }, [isSubmitting]);
 
-    const openDeleteModal = (faculty) => {
+    const openDeleteModal = useCallback((faculty) => {
         setDeletingDepartment(faculty);
-    };
+    }, []);
 
-    const closeDeleteModal = () => {
+    const closeDeleteModal = useCallback(() => {
         if (isSubmitting) return;
 
         setDeletingDepartment(null);
-    };
+    }, [isSubmitting]);
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = useCallback(async (event) => {
         event.preventDefault();
 
         const name = departmentName.trim();
@@ -137,9 +137,16 @@ function Department({
         } finally {
             setIsSubmitting(false);
         }
-    };
+    }, [
+        departmentName,
+        selectedFaculty,
+        editingDepartment,
+        updateDepartment,
+        createDepartment,
+        closeModal,
+    ]);
 
-    const handleDelete = async () => {
+    const handleDelete = useCallback(async () => {
         if (!deletingDepartment) return;
 
         setIsSubmitting(true);
@@ -157,17 +164,21 @@ function Department({
         } finally {
             setIsSubmitting(false);
         }
-    };
+    }, [deletingDepartment, deleteDepartment]);
 
-    const totalPages = Math.ceil(
-        departments.length / itemsPerPage
+    const totalPages = useMemo(
+        () => Math.ceil(departments.length / itemsPerPage),
+        [departments.length, itemsPerPage]
     );
 
-    const startIndex = (currentPage - 1) * itemsPerPage;
+    const startIndex = useMemo(
+        () => (currentPage - 1) * itemsPerPage,
+        [currentPage, itemsPerPage]
+    );
 
-    const paginatedDepartments = departments.slice(
-        startIndex,
-        startIndex + itemsPerPage
+    const paginatedDepartments = useMemo(
+        () => departments.slice(startIndex, startIndex + itemsPerPage),
+        [departments, startIndex, itemsPerPage]
     );
 
     if (isDepartmentLoading) {

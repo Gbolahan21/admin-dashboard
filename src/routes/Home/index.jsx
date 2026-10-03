@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { X, UserCog, GraduationCap } from 'lucide-react';
 import moh from '../../assets/images/moh.png';
@@ -14,27 +14,27 @@ function Home() {
     document.title = 'Home | Moh';
   }, []);
 
-  const handleRoleSelect = (role) => {
+  const handleRoleSelect = useCallback((role) => {
     setSelectedRole(role);
     setShowRoleModal(false);
     setShowActionModal(true);
-  };
+  }, []);
 
-  const closeModals = () => {
+  const closeModals = useCallback(() => {
     setShowRoleModal(false);
     setShowActionModal(false);
     setSelectedRole('');
-  };
+  }, []);
 
-  const handleSignIn = () => {
+  const handleSignIn = useCallback(() => {
     navigate(`/signin?role=${selectedRole}`);
     closeModals();
-  };
+  }, [navigate, closeModals, selectedRole]);
 
-  const handleSignUp = () => {
+  const handleSignUp = useCallback(() => {
     navigate(`/signup?role=${selectedRole}`);
     closeModals();
-  };
+  }, [navigate, closeModals, selectedRole]);
 
   return (
     <div className='home-container'>

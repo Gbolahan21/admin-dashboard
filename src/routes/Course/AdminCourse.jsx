@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Plus, Pencil, Trash } from "lucide-react";
 
 import { Modal, Pagination, Dropdown, Loading } from "../../components";
@@ -68,10 +68,10 @@ function AdminCourse({
         };
 
         loadCourse();
-         // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-   const openEditModal = (course) => {
+    const openEditModal = useCallback((course) => {
         setEditingCourse(course);
         setCourseCode(course.course_code);
         setCourseTitle(course.course_title);
@@ -80,9 +80,9 @@ function AdminCourse({
         setSelectedDepartment(String(course.department_id));
         setSelectedSemester(String(course.semester_id));
         setModalVisible(true);
-    };
+    }, []);
 
-    const openAddModal = () => {
+    const openAddModal = useCallback(() => {
         setEditingCourse(null);
         setCourseCode("");
         setCourseTitle("");
@@ -91,9 +91,9 @@ function AdminCourse({
         setSelectedDepartment("");
         setSelectedSemester("");
         setModalVisible(true);
-    };
+    }, []);
 
-    const closeModal = () => {
+    const closeModal = useCallback(() => {
         if (isSubmitting) return;
 
         setModalVisible(false);
@@ -104,20 +104,20 @@ function AdminCourse({
         setSelectedDepartment("");
         setSelectedSemester("");
         setEditingCourse(null);
-    };
+    }, [isSubmitting]);
 
-    const openDeleteModal = (course) => {
+    const openDeleteModal = useCallback((course) => {
         setDeletingCourse(course);
-    };
+    }, []);
 
-    const closeDeleteModal = () => {
+    const closeDeleteModal = useCallback(() => {
         if (isSubmitting) return;
 
         setDeletingCourse(null);
-    };
+    }, [isSubmitting]);
     
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = useCallback(async (event) => {
         event.preventDefault();
 
         const code = courseCode.trim();
@@ -172,9 +172,20 @@ function AdminCourse({
         } finally {
             setIsSubmitting(false);
         }
-    };
+    }, [
+        courseCode,
+        courseTitle,
+        courseUnit,
+        selectedLevel,
+        selectedDepartment,
+        selectedSemester,
+        editingCourse,
+        updateCourse,
+        createCourse,
+        closeModal,
+    ]);
 
-    const handleDelete = async () => {
+    const handleDelete = useCallback(async () => {
         if (!deletingCourse) return;
 
         setIsSubmitting(true);
@@ -192,17 +203,21 @@ function AdminCourse({
         } finally {
             setIsSubmitting(false);
         }
-    };
+    }, [deletingCourse, deleteCourse]);
 
-    const totalPages = Math.ceil(
-        courses.length / itemsPerPage
+    const totalPages = useMemo(
+        () => Math.ceil(courses.length / itemsPerPage),
+        [courses.length, itemsPerPage]
     );
 
-    const startIndex = (currentPage - 1) * itemsPerPage;
+    const startIndex = useMemo(
+        () => (currentPage - 1) * itemsPerPage,
+        [currentPage, itemsPerPage]
+    );
 
-    const paginatedCourses = courses.slice(
-        startIndex,
-        startIndex + itemsPerPage
+    const paginatedCourses = useMemo(
+        () => courses.slice(startIndex, startIndex + itemsPerPage),
+        [courses, startIndex, itemsPerPage]
     );
 
     if (isCourseLoading) {

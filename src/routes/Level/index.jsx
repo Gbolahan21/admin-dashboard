@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Plus, Pencil, Trash } from "lucide-react";
 
 import { Modal, Pagination, Loading } from "../../components";
@@ -55,37 +55,37 @@ function Level({
     }, []);
 
 
-    const openEditModal = (level) => {
+    const openEditModal = useCallback((level) => {
         setEditingLevel(level);
         setLevelName(level.name);
         setModalVisible(true);
-    };
+    }, []);
 
-    const openAddModal = () => {
+    const openAddModal = useCallback(() => {
         setEditingLevel(null);
         setLevelName("");
         setModalVisible(true);
-    };
+    }, []);
 
-    const closeModal = () => {
+    const closeModal = useCallback(() => {
         if (isSubmitting) return;
 
         setModalVisible(false);
         setLevelName("");
         setEditingLevel(null);
-    };
+    }, [isSubmitting]);
 
-    const openDeleteModal = (level) => {
+    const openDeleteModal = useCallback((level) => {
         setDeletingLevel(level);
-    };
+    }, []);
 
-    const closeDeleteModal = () => {
+    const closeDeleteModal = useCallback(() => {
         if (isSubmitting) return;
 
         setDeletingLevel(null);
-    };
+    }, [isSubmitting]);
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = useCallback(async (event) => {
         event.preventDefault();
 
         const name = levelName.trim();
@@ -131,9 +131,9 @@ function Level({
         } finally {
             setIsSubmitting(false);
         }
-    };
+    }, [levelName, editingLevel, updateLevel, createLevel]);
 
-    const handleDelete = async () => {
+    const handleDelete = useCallback(async () => {
         if (!deletingLevel) return;
 
         setIsSubmitting(true);
@@ -151,17 +151,21 @@ function Level({
         } finally {
             setIsSubmitting(false);
         }
-    };
+    }, [deletingLevel, deleteLevel]);
 
-    const totalPages = Math.ceil(
-        levels.length / itemsPerPage
+    const totalPages = useMemo(
+        () => Math.ceil(levels.length / itemsPerPage),
+        [levels.length, itemsPerPage]
     );
 
-    const startIndex = (currentPage - 1) * itemsPerPage;
+    const startIndex = useMemo(
+        () => (currentPage - 1) * itemsPerPage,
+        [currentPage, itemsPerPage]
+    );
 
-    const paginatedLevels = levels.slice(
-        startIndex,
-        startIndex + itemsPerPage
+    const paginatedLevels = useMemo(
+        () => levels.slice(startIndex, startIndex + itemsPerPage),
+        [levels, startIndex, itemsPerPage]
     );
 
     if (isLevelLoading) {

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useMemo } from "react";
 import {
   CalendarCheck,
   Users,
@@ -30,20 +30,13 @@ function AdminAttendance({ getAttendance, attendance, level, getLevels }) {
     date: "",
   });
 
-  useEffect(() => {
-    document.title = "Attendance | Moh";
-  }, []);
+  const records = useMemo(
+    () => 
+        attendance?.attendance || [],
+  [attendance?.attendance])
 
-  useEffect(() => {
-    getAttendance();
-    getLevels();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const records = attendance?.attendance || [];
-
-  const courseOptions = [
+  const courseOptions = useMemo(
+    () => [
     ...new Map(
         records
             .filter((record) => record.course_code)
@@ -55,9 +48,10 @@ function AdminAttendance({ getAttendance, attendance, level, getLevels }) {
                 },
             ])
     ).values(),
-  ];
+  ], [records]);
 
-  const filteredRecords = records.filter((record) => {
+  const filteredRecords = useMemo(
+    () => records.filter((record) => {
     const searchValue = search.toLowerCase().trim();
 
     const matchesSearch =
@@ -88,16 +82,23 @@ function AdminAttendance({ getAttendance, attendance, level, getLevels }) {
         matchesCourse &&
         matchesDate
     );
-  });
+  }), [
+    appliedFilters.date,
+    appliedFilters.level,
+    appliedFilters.status,
+    appliedFilters.course,
+    search,
+    records
+  ]);
 
-  const updateFilter = (name, value) => {
+  const updateFilter = useCallback((name, value) => {
     setFilterDraft((prev) => ({
         ...prev,
         [name]: value,
     }));
-  };
+  }, []);
 
-  const clearFilters = () => {
+  const clearFilters = useCallback(() => {
     const emptyFilters = {
         status: "",
         level: "",
@@ -109,55 +110,70 @@ function AdminAttendance({ getAttendance, attendance, level, getLevels }) {
     setFilterDraft(emptyFilters);
     setAppliedFilters(emptyFilters);
     setFilterVisible(false);
-  };
+  }, []);
 
-  const applyFilters = () => {
+  const applyFilters = useCallback(() => {
     setAppliedFilters(filterDraft);
     setFilterVisible(false);
-  };
+  }, [filterDraft]);
 
   const openModal = useCallback(() => {
     setFilterVisible(true);
   }, []);
 
-  const openAttendanceView = (record) => {
+  const openAttendanceView = useCallback((record) => {
     setSelectedAttendance(record);
     setAttendanceViewVisible(true);
-  };
+  }, []);
 
-  const closeAttendanceView = () => {
+  const closeAttendanceView = useCallback(() => {
     setSelectedAttendance(null);
     setAttendanceViewVisible(false);
-  };
+  }, []);
 
-  const openActionModal = (record) => {
+  const openActionModal = useCallback((record) => {
     setSelectedAttendance(record);
     setActionVisible(true);
-  };
+  }, []);
 
-  const closeActionModal = () => {
+  const closeActionModal = useCallback(() => {
     setActionVisible(false);
     setSelectedAttendance(null);
-  };
+  }, []);
 
   const handleSearch = useCallback((e) => {
     setSearch(e.target.value)
   }, [])
 
-  const totalRecords = filteredRecords.length;
+  const totalRecords = useMemo(
+    () => 
+        filteredRecords.length,
+  [filteredRecords.length]);
 
-  const presentRecords = filteredRecords.filter(
-    (record) => record.status?.toLowerCase() === "present"
-  ).length;
+  const { presentRecords, absentRecords } = useMemo(() => {
+    let present = 0;
+    let absent = 0;
 
-  const absentRecords = filteredRecords.filter(
-    (record) => record.status?.toLowerCase() === "absent"
-  ).length;
+    filteredRecords.forEach((item) => {
+      if (item.status === "Present") {
+        present++;
+      } else if (item.status === "Absent") {
+        absent++;
+      }
+    });
 
-  const attendanceRate =
-    totalRecords > 0
-      ? Math.round((presentRecords / totalRecords) * 100)
-      : 0;
+    return {
+      presentCount: present,
+      absentCount: absent,
+    };
+  }, [filteredRecords]);
+
+  const attendanceRate = useMemo(
+    () =>
+      totalRecords > 0
+        ? Math.round((presentRecords / totalRecords) * 100)
+        : 0,
+    [presentRecords, totalRecords])
 
   const formatDate = (date) => {
     if (!date) return "-";
@@ -182,6 +198,16 @@ function AdminAttendance({ getAttendance, attendance, level, getLevels }) {
       minute: "2-digit",
     });
   };
+
+  useEffect(() => {
+    document.title = "Attendance | Moh";
+  }, []);
+
+  useEffect(() => {
+    getAttendance();
+    getLevels();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="attendance-page">

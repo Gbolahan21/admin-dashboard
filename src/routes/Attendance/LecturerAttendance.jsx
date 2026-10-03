@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
     CalendarCheck,
     Clock,
@@ -20,10 +20,7 @@ function LecturerAttendance({
 }) {
     const { myCourses = [] } = lecturer || {};
 
-    const {
-        activeSession = null,
-        error = null,
-    } = lecturerAttendance || {};
+    const {activeSession = null, error = null} = lecturerAttendance || {};
 
     const [selectedCourse, setSelectedCourse] = useState("");
     const [isLoading, setIsLoading] = useState(true);
@@ -47,7 +44,6 @@ function LecturerAttendance({
         };
 
         loadAttendance();
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -96,44 +92,46 @@ function LecturerAttendance({
         getActiveAttendance,
     ]);
 
-    const durationOptions = [
+    const durationOptions = useMemo(
+      () => [
         {
-            label: "5 minutes",
-            value: 5,
+          label: "5 minutes",
+          value: 5,
         },
         {
-            label: "10 minutes",
-            value: 10,
+          label: "10 minutes",
+          value: 10,
         },
         {
-            label: "15 minutes",
-            value: 15,
+          label: "15 minutes",
+          value: 15,
         },
         {
-            label: "20 minutes",
-            value: 20,
+          label: "20 minutes",
+          value: 20,
         },
         {
-            label: "30 minutes",
-            value: 30,
+          label: "30 minutes",
+          value: 30,
         },
-    ];
+    ], []);
 
-    const formatTime = (seconds) => {
+    const formatTime = useMemo(
+      () => (seconds) => {
         const minutes = Math.floor(seconds / 60);
         const secs = seconds % 60;
 
         return `${String(minutes).padStart(
-            2,
-            "0"
+          2,
+          "0"
         )}:${String(secs).padStart(2, "0")}`;
-    };
+    }, []);
 
-    const handleCourseSelect = (courseId) => {
+    const handleCourseSelect = useCallback((courseId) => {
         setSelectedCourse(courseId);
-    };
+    }, []);
 
-    const handleStartAttendance = () => {
+    const handleStartAttendance = useCallback(() => {
         if (!selectedCourse) {
             return;
         }
@@ -153,9 +151,9 @@ function LecturerAttendance({
                 getActiveAttendance();
             }
         );
-    };
+    }, [duration, getActiveAttendance, selectedCourse, startAttendance]);
 
-    const handleCloseAttendance = () => {
+    const handleCloseAttendance = useCallback(() => {
         if (!activeSession?.id) {
             return;
         }
@@ -172,15 +170,17 @@ function LecturerAttendance({
                 getActiveAttendance();
             }
         );
-    };
+    }, [activeSession.id, closeAttendance, getActiveAttendance]);
 
-    const courseOptions = myCourses.map(
-        (course) => ({
-            label: `${course.course_code} - ${course.course_title}`,
-            value: course.course_id,
-        })
+    const courseOptions = useMemo(
+      () =>
+        myCourses.map((course) => ({
+          label: `${course.course_code} - ${course.course_title}`,
+          value: course.course_id,
+        })),
+      [myCourses]
     );
-
+    
     if (isLoading) {
         return <Loading size="big" />;
     }

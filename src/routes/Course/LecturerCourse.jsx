@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Trash2, BookOpen } from "lucide-react";
 import { Button, Modal, Dropdown } from "../../components";
 
@@ -40,7 +40,7 @@ function LecturerCourse({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const handleFacultySelect = (facultyId) => {
+    const handleFacultySelect = useCallback((facultyId) => {
         setSelectedFaculty(facultyId);
         setSelectedDepartment("");
         setSelectedLevel("");
@@ -49,15 +49,15 @@ function LecturerCourse({
         if (facultyId) {
             getDepartmentsByFaculty(facultyId);
         }
-    };
+    }, [getDepartmentsByFaculty]);
 
-    const handleDepartmentSelect = (departmentId) => {
+    const handleDepartmentSelect = useCallback((departmentId) => {
         setSelectedDepartment(departmentId);
         setSelectedLevel("");
         setSelectedCourses([]);
-    };
+    }, []);
 
-    const handleLevelSelect = (levelId) => {
+    const handleLevelSelect = useCallback((levelId) => {
         setSelectedLevel(levelId);
         setSelectedCourses([]);
 
@@ -75,9 +75,9 @@ function LecturerCourse({
                 console.error("Available courses error:", error);
             }
         );
-    };
+    }, [selectedFaculty, selectedDepartment, getAvailableCourses]);
 
-    const handleCourseSelect = (courseId) => {
+    const handleCourseSelect = useCallback((courseId) => {
         setSelectedCourses((prev) => {
             if (prev.includes(courseId)) {
                 return prev.filter((id) => id !== courseId);
@@ -85,9 +85,9 @@ function LecturerCourse({
 
             return [...prev, courseId];
         });
-    };
+    }, []);
 
-    const handleRegisterCourses = () => {
+    const handleRegisterCourses = useCallback(() => {
         if (!selectedCourses.length) {
             return;
         }
@@ -110,14 +110,22 @@ function LecturerCourse({
                 });
             }
         );
-    };
+    }, [
+        selectedCourses,
+        selectedFaculty,
+        selectedDepartment,
+        selectedLevel,
+        registerCourses,
+        getMyCourses,
+        getAvailableCourses,
+    ]);
 
-    const handleOpenRemoveModal = (course) => {
+    const handleOpenRemoveModal = useCallback((course) => {
         setSelectedCourse(course);
         setShowRemoveModal(true);
-    };
+    }, []);
 
-    const handleRemoveCourse = () => {
+    const handleRemoveCourse = useCallback(() => {
         if (!selectedCourse) {
             return;
         }
@@ -131,40 +139,55 @@ function LecturerCourse({
                 getMyCourses();
             }
         );
-    };
+    }, [selectedCourse, removeCourseRegistration, getMyCourses]);
 
-    const facultyOptions = faculties.map((faculty) => ({
-        label: faculty.name,
-        value: faculty.id,
-    }));
+    const facultyOptions = useMemo(
+        () => faculties.map((faculty) => ({
+            label: faculty.name,
+            value: faculty.id,
+        })),
+        [faculties]
+    );
 
-    const departmentOptions = departments.map((department) => ({
-        label: department.name,
-        value: department.id,
-    }));
+    const departmentOptions = useMemo(
+        () => departments.map((department) => ({
+            label: department.name,
+            value: department.id,
+        })),
+        [departments]
+    );
 
-    const levelOptions = levels.map((level) => ({
-        label: level.name,
-        value: level.id,
-    }));
+    const levelOptions = useMemo(
+        () => levels.map((level) => ({
+            label: level.name,
+            value: level.id,
+        })),
+        [levels]
+    );
 
-    const selectedFacultyName =
-        faculties.find(
+    const selectedFacultyName = useMemo(
+        () => faculties.find(
             (faculty) =>
                 Number(faculty.id) === Number(selectedFaculty)
-        )?.name || "";
+        )?.name || "",
+        [faculties, selectedFaculty]
+    );
 
-    const selectedDepartmentName =
-        departments.find(
+    const selectedDepartmentName = useMemo(
+        () => departments.find(
             (department) =>
                 Number(department.id) === Number(selectedDepartment)
-        )?.name || "";
+        )?.name || "",
+        [departments, selectedDepartment]
+    );
 
-    const selectedLevelName =
-        levels.find(
+    const selectedLevelName = useMemo(
+        () => levels.find(
             (level) =>
                 Number(level.id) === Number(selectedLevel)
-        )?.name || "";
+        )?.name || "",
+        [levels, selectedLevel]
+    );
 
     return (
         <div className="faculty-page lecturer-course-page">

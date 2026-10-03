@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Plus, Pencil, Trash } from "lucide-react";
 
 import { Modal, Pagination, Loading } from "../../components";
@@ -58,37 +58,37 @@ function Semester({
     }, []);
 
 
-    const openEditModal = (semester) => {
+    const openEditModal = useCallback((semester) => {
         setEditingSemester(semester);
         setSemesterName(semester.name);
         setModalVisible(true);
-    };
+    }, []);
 
-    const openAddModal = () => {
+    const openAddModal = useCallback(() => {
         setEditingSemester(null);
         setSemesterName("");
         setModalVisible(true);
-    };
+    }, []);
 
-    const closeModal = () => {
+    const closeModal = useCallback(() => {
         if (isSubmitting) return;
 
         setModalVisible(false);
         setSemesterName("");
         setEditingSemester(null);
-    };
+    }, [isSubmitting]);
 
-    const openDeleteModal = (semester) => {
+    const openDeleteModal = useCallback((semester) => {
         setDeletingSemester(semester);
-    };
+    }, []);
 
-    const closeDeleteModal = () => {
+    const closeDeleteModal = useCallback(() => {
         if (isSubmitting) return;
 
         setDeletingSemester(null);
-    };
+    }, [isSubmitting]);
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = useCallback(async (event) => {
         event.preventDefault();
 
         const name = semesterName.trim();
@@ -134,23 +134,23 @@ function Semester({
         } finally {
             setIsSubmitting(false);
         }
-    };
+    }, [semesterName, editingSemester, updateSemester, createSemester]);
 
-    const openCurrentSemesterModal = (semester) => {
+    const openCurrentSemesterModal = useCallback((semester) => {
         if (semester.is_current || isSettingCurrent) {
             return;
         }
 
         setSelectedCurrentSemester(semester);
-    };
+    }, [isSettingCurrent]);
 
-    const closeCurrentSemesterModal = () => {
+    const closeCurrentSemesterModal = useCallback(() => {
         if (isSettingCurrent) return;
 
         setSelectedCurrentSemester(null);
-    };
+    }, [isSettingCurrent]);
 
-    const handleSetCurrentSemester = async () => {
+    const handleSetCurrentSemester = useCallback(async () => {
         if (!selectedCurrentSemester || isSettingCurrent) {
             return;
         }
@@ -173,9 +173,9 @@ function Semester({
         } finally {
             setIsSettingCurrent(false);
         }
-    };
+    }, [selectedCurrentSemester, isSettingCurrent, setCurrentSemester]);
 
-    const handleDelete = async () => {
+    const handleDelete = useCallback(async () => {
         if (!deletingSemester) return;
 
         setIsSubmitting(true);
@@ -193,17 +193,21 @@ function Semester({
         } finally {
             setIsSubmitting(false);
         }
-    };
+    }, [deletingSemester, deleteSemester]);
 
-    const totalPages = Math.ceil(
-        semesters.length / itemsPerPage
+    const totalPages = useMemo(
+        () => Math.ceil(semesters.length / itemsPerPage),
+        [semesters.length, itemsPerPage]
     );
 
-    const startIndex = (currentPage - 1) * itemsPerPage;
+    const startIndex = useMemo(
+        () => (currentPage - 1) * itemsPerPage,
+        [currentPage, itemsPerPage]
+    );
 
-    const paginatedSemesters = semesters.slice(
-        startIndex,
-        startIndex + itemsPerPage
+    const paginatedSemesters = useMemo(
+        () => semesters.slice(startIndex, startIndex + itemsPerPage),
+        [semesters, startIndex, itemsPerPage]
     );
 
     if (isSemesterLoading) {

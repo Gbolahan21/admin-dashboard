@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Eye, Search } from "lucide-react";
 
 import {
@@ -7,15 +7,8 @@ import {
     Modal,
 } from "../../components";
 
-function Student({
-    student,
-    getStudents,
-}) {
-    const {
-        students = [],
-        page = 1,
-        totalPages = 1,
-    } = student;
+function Student({student, getStudents}) {
+    const {students = [], page = 1, totalPages = 1} = student;
 
     const [search, setSearch] = useState("");
     const [isStudentLoading, setIsStudentLoading] = useState(true);
@@ -53,29 +46,27 @@ function Student({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const handleSearch = (event) => {
-        const value = event.target.value;
+    const handleSearch = useCallback(
+        (event) => {
+            const value = event.target.value;
 
-        setSearch(value);
+            setSearch(value);
 
-        getStudents(
-            1,
-            10,
-            value
-        );
-    };
+            getStudents(1, 10, value);
+        },
+        [getStudents]
+    );
 
-    const handlePageChange = (newPage) => {
-        getStudents(
-            newPage,
-            10,
-            search
-        );
-    };
+    const handlePageChange = useCallback(
+        (newPage) => {
+            getStudents(newPage, 10, search);
+        },
+        [getStudents, search]
+    );
 
-    const handleViewStudent = (student) => {
+    const handleViewStudent = useCallback((student) => {
         setSelectedStudent(student);
-    };
+    }, []);
 
     if (isStudentLoading) {
         return <Loading size="big" />;

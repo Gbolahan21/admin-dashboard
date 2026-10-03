@@ -1,4 +1,4 @@
-import {useState, useEffect} from "react";
+import {useState, useEffect, useCallback} from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import {Button} from "../../components";
 import { Eye, EyeOff, ArrowLeft, LogIn } from "lucide-react";
@@ -9,21 +9,21 @@ function SignIn({ signin, navigate }) {
   const role = searchParams.get("role") || "lecturer";
   const isLecturer = role === "lecturer";
   const [email, setEmail] = useState(() => {
-    const role = new URLSearchParams(window.location.search).get("role") || "lecturer";
-    const emailKey =
-      role === "admin"
-        ? "adminSavedEmail"
-        : "lecturerSavedEmail";
+  const role = new URLSearchParams(window.location.search).get("role") || "lecturer";
+  const emailKey =
+    role === "admin"
+      ? "adminSavedEmail"
+      : "lecturerSavedEmail";
     return localStorage.getItem(emailKey) || "";
   });
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(() => {
-    const role = new URLSearchParams(window.location.search).get("role") || "lecturer";
-    const emailKey =
-      role === "admin"
-        ? "adminSavedEmail"
-        : "lecturerSavedEmail";
+  const role = new URLSearchParams(window.location.search).get("role") || "lecturer";
+  const emailKey =
+    role === "admin"
+      ? "adminSavedEmail"
+      : "lecturerSavedEmail";
     return Boolean(localStorage.getItem(emailKey));
   });
 
@@ -44,7 +44,7 @@ function SignIn({ signin, navigate }) {
     }
   }, [navigate, role]);
 
-  const handleLogin = () => {
+  const handleLogin = useCallback(() => {
     signin(
       email.trim().toLowerCase(),
       password,
@@ -91,7 +91,7 @@ function SignIn({ signin, navigate }) {
         navigate('/dashboard');
       }
     )
-  };
+  }, [signin, email, password, role, rememberMe, navigate]);
 
   const details = !email || !password;
   

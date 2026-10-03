@@ -1,8 +1,14 @@
-import {useState, useEffect} from "react";
+import {useState, useEffect, useCallback} from "react";
 import {Link, useSearchParams} from "react-router-dom";
 import {Button, Dropdown} from "../../components";
 import { Eye, EyeOff, ArrowLeft, UserPlus } from "lucide-react";
 import * as Helpers from '../../helpers';
+
+
+const titleOptions = [
+  { label: "Mr", value: "Mr" },
+  { label: "Mrs", value: "Mrs" },
+];
 
 function SignUp({ signup, navigate }) {
   const [firstname, setFirstName] = useState('');
@@ -24,7 +30,7 @@ function SignUp({ signup, navigate }) {
     document.title = `${isLecturer ? "Lecturer" : "Admin"} SignUp | Moh`;
   }, [isLecturer]);
 
-  const handleRegister = () => {
+  const handleRegister = useCallback(() => {
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
  
     if (!passwordRegex.test(password)) {
@@ -69,14 +75,21 @@ function SignUp({ signup, navigate }) {
         navigate(`/signin?role=${role}`);
       }
     )
-  };
+  }, [
+    password,
+    confirmPassword,
+    firstname,
+    lastname,
+    email,
+    isLecturer,
+    title,
+    staffId,
+    role,
+    signup,
+    navigate,
+  ]);
 
   const details = !firstname || !lastname || !email || (!isLecturer && !title) || (isLecturer && !staffId) || !password || !confirmPassword;
-
-  const titleOptions = [
-    { label: "Mr", value: "Mr" },
-    { label: "Mrs", value: "Mrs" },
-  ];
   
   return (
     <div>

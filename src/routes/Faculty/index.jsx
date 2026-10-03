@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Plus, Pencil, Trash } from "lucide-react";
 
 import { Modal, Pagination, Loading } from "../../components";
@@ -55,37 +55,37 @@ function Faculty({
     }, []);
 
 
-    const openEditModal = (faculty) => {
+    const openEditModal = useCallback((faculty) => {
         setEditingFaculty(faculty);
         setFacultyName(faculty.name);
         setModalVisible(true);
-    };
+    }, []);
 
-    const openAddModal = () => {
+    const openAddModal = useCallback(() => {
         setEditingFaculty(null);
         setFacultyName("");
         setModalVisible(true);
-    };
+    }, []);
 
-    const closeModal = () => {
+    const closeModal = useCallback(() => {
         if (isSubmitting) return;
 
         setModalVisible(false);
         setFacultyName("");
         setEditingFaculty(null);
-    };
+    }, [isSubmitting]);
 
-    const openDeleteModal = (faculty) => {
+    const openDeleteModal = useCallback((faculty) => {
         setDeletingFaculty(faculty);
-    };
+    }, []);
 
-    const closeDeleteModal = () => {
+    const closeDeleteModal = useCallback(() => {
         if (isSubmitting) return;
 
         setDeletingFaculty(null);
-    };
+    }, [isSubmitting]);
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = useCallback(async (event) => {
         event.preventDefault();
 
         const name = facultyName.trim();
@@ -131,9 +131,9 @@ function Faculty({
         } finally {
             setIsSubmitting(false);
         }
-    };
+    }, [facultyName, editingFaculty, updateFaculty, createFaculty]);
 
-    const handleDelete = async () => {
+    const handleDelete = useCallback(async () => {
         if (!deletingFaculty) return;
 
         setIsSubmitting(true);
@@ -151,17 +151,21 @@ function Faculty({
         } finally {
             setIsSubmitting(false);
         }
-    };
+    }, [deletingFaculty, deleteFaculty]);
 
-    const totalPages = Math.ceil(
-        faculties.length / itemsPerPage
+    const totalPages = useMemo(
+        () => Math.ceil(faculties.length / itemsPerPage),
+        [faculties.length, itemsPerPage]
     );
 
-    const startIndex = (currentPage - 1) * itemsPerPage;
+    const startIndex = useMemo(
+        () => (currentPage - 1) * itemsPerPage,
+        [currentPage, itemsPerPage]
+    );
 
-    const paginatedFaculties = faculties.slice(
-        startIndex,
-        startIndex + itemsPerPage
+    const paginatedFaculties = useMemo(
+        () => faculties.slice(startIndex, startIndex + itemsPerPage),
+        [faculties, startIndex, itemsPerPage]
     );
 
     if (isFacultyLoading) {
