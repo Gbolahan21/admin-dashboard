@@ -103,6 +103,18 @@ function SidebarMenu({ navigate, sidebarOpen, closeSidebar, openLogoutModal }) {
                             </button>
                         </>
                     )}
+                    {!isAdmin && (
+                        <button
+                            type="button"
+                            className={`sidebar-item ${
+                                isActive("/student") ? "active" : ""
+                            }`}
+                            onClick={() => navigate("/student")}
+                            >
+                            <Users size={20} />
+                            <span>My Students</span>
+                        </button>
+                    )}
                 </div>
 
 

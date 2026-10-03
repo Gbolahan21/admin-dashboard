@@ -26,6 +26,25 @@ export const getStudents = (
         }
     );
 
+export const getLecturerStudents = (
+    page = 1,
+    limit = 10,
+    search = "",
+    error,
+    success
+) =>
+    Helpers.api(
+        `/lecturer/course-registration/students?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`,
+        "GET",
+        {},
+        { error, success },
+        {
+            error: ERROR,
+            loading: LOADING,
+            responder: STUDENT,
+        }
+    );
+
 export const getRegCourses = (error, success) =>
   Helpers.api(
     "/student/courses",
