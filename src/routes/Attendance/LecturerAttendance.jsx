@@ -153,15 +153,17 @@ function LecturerAttendance({
         );
     }, [duration, getActiveAttendance, selectedCourse, startAttendance]);
 
+    const activeSessionId = activeSession?.id;
+
     const handleCloseAttendance = useCallback(() => {
-        if (!activeSession?.id) {
+        if (!activeSessionId) {
             return;
         }
 
         setClosing(true);
 
         closeAttendance(
-            activeSession.id,
+            activeSessionId,
             () => {
                 setClosing(false);
             },
@@ -170,7 +172,7 @@ function LecturerAttendance({
                 getActiveAttendance();
             }
         );
-    }, [activeSession.id, closeAttendance, getActiveAttendance]);
+    }, [activeSessionId, closeAttendance, getActiveAttendance]);
 
     const courseOptions = useMemo(
       () =>

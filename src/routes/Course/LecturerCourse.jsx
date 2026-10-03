@@ -26,7 +26,6 @@ function LecturerCourse({
     const [selectedCourses, setSelectedCourses] = useState([]);
     const [showRemoveModal, setShowRemoveModal] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState(null);
-    console.log(showRemoveModal)
 
     useEffect(() => {
       document.title = 'Lecturer | Moh';
