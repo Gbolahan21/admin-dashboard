@@ -3,6 +3,7 @@ import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import Dashboard from "./Dashboard";
 import Student from "./Student";
+import Lecturer from "./Lecturer";
 import Attendance from "./Attendance";
 import Setting from "./Setting";
 import Report from "./Report";
@@ -42,6 +43,11 @@ const baseRoutes = {
       name: "Student",
       component: Student,
       path: "/student",
+    },
+    {
+      name: "Lecturer",
+      component: Lecturer,
+      path: "/lecturer",
     },
     {
       name: "Attendance",

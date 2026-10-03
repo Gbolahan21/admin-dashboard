@@ -11,7 +11,27 @@ import {
     REMOVE_LECTURER_COURSE,
     ERROR,
     LOADING,
+    LECTURER,
 } from "../types";
+
+export const getLecturers = (
+    page = 1,
+    limit = 10,
+    search = "",
+    error,
+    success
+) =>
+    Helpers.api(
+        `/admin/lecturers?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`,
+        "GET",
+        {},
+        { error, success },
+        {
+            error: ERROR,
+            loading: LOADING,
+            responder: LECTURER,
+        }
+    );
 
 export const getCurrentSemester = (
     error,

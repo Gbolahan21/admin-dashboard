@@ -79,17 +79,29 @@ function SidebarMenu({ navigate, sidebarOpen, closeSidebar, openLogoutModal }) {
 
 
                     {isAdmin && (
+                        <>
+                            <button
+                                type="button"
+                                className={`sidebar-item ${
+                                    isActive("/lecturer") ? "active" : ""
+                                }`}
+                                onClick={() => navigate("/lecturer")}
+                                    >
+                                <GraduationCap size={20} />
+                                <span>Lecturer</span>
+                            </button>
 
-                        <button
-                            type="button"
-                            className={`sidebar-item ${
-                                isActive("/student") ? "active" : ""
+                            <button
+                                type="button"
+                                className={`sidebar-item ${
+                                    isActive("/student") ? "active" : ""
                                 }`}
                                 onClick={() => navigate("/student")}
                                 >
-                            <Users size={20} />
-                            <span>Students</span>
-                        </button>
+                                <Users size={20} />
+                                <span>Students</span>
+                            </button>
+                        </>
                     )}
                 </div>
 

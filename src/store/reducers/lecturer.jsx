@@ -8,9 +8,11 @@ import {
     GET_MY_LECTURER_COURSES,
     REGISTER_LECTURER_COURSES,
     REMOVE_LECTURER_COURSE,
+    LECTURER,
 } from "../types";
 
 const initialState = {
+    lecturers: [],
     currentSemester: null,
     faculties: [],
     departments: [],
@@ -27,6 +29,14 @@ export default function (
     const { payload } = action;
 
     switch (action.type) {
+         case LECTURER:
+            return {
+                ...state,
+                lecturers: payload.records,
+                page: payload.page,
+                totalPages: payload.totalPages,
+                total: payload.total,
+            };
 
         case GET_CURRENT_SEMESTER:
             return {
