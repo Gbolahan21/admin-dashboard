@@ -136,6 +136,8 @@ function Lecturer({lecturer, getLecturers}) {
                                         Email
                                     </th>
 
+                                    <th>Status</th>
+
                                     <th>
                                         Actions
                                     </th>
@@ -170,6 +172,17 @@ function Lecturer({lecturer, getLecturers}) {
                                             <td>
                                                 {lecturer.email}
                                             </td>
+
+                                            <td>
+                                                <span
+                                                    className={`student-status-badge status-${String(
+                                                        lecturer.status || "unknown"
+                                                    ).toLowerCase()}`}
+                                                >
+                                                    {lecturer.status || "Unknown"}
+                                                </span>
+                                            </td>
+
 
                                             <td>
 
@@ -221,9 +234,7 @@ function Lecturer({lecturer, getLecturers}) {
                                         </div>
 
                                         <div className="faculty-card-details">
-
                                             <div className="faculty-card-detail">
-
                                                 <span>
                                                     Staff ID
                                                 </span>
@@ -231,11 +242,9 @@ function Lecturer({lecturer, getLecturers}) {
                                                 <strong>
                                                     {lecturer.staff_id}
                                                 </strong>
-
                                             </div>
 
                                             <div className="faculty-card-detail">
-
                                                 <span>
                                                     Email
                                                 </span>
@@ -243,9 +252,23 @@ function Lecturer({lecturer, getLecturers}) {
                                                 <strong>
                                                     {lecturer.email}
                                                 </strong>
-
                                             </div>
+                                        </div>
 
+                                        <div className="faculty-card-details">
+                                            <div className="faculty-card-detail">
+                                                <span>
+                                                    Status
+                                                </span>
+
+                                                <strong
+                                                    className={`student-status-badge status-${String(
+                                                        lecturer.status || "unknown"
+                                                    ).toLowerCase()}`}
+                                                >
+                                                    {lecturer.status || "Unknown"}
+                                                </strong>
+                                            </div>
                                         </div>
 
                                         <div className="faculty-card-actions">

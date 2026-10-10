@@ -245,9 +245,7 @@ function AdminStudent({student, getStudents}) {
                                         </div>
 
                                         <div className="faculty-card-details">
-
                                             <div className="faculty-card-detail">
-
                                                 <span>
                                                     Matric No
                                                 </span>
@@ -255,11 +253,9 @@ function AdminStudent({student, getStudents}) {
                                                 <strong>
                                                     {student.matricNo}
                                                 </strong>
-
                                             </div>
 
                                             <div className="faculty-card-detail">
-
                                                 <span>
                                                     Department
                                                 </span>
@@ -267,15 +263,11 @@ function AdminStudent({student, getStudents}) {
                                                 <strong>
                                                     {student.department}
                                                 </strong>
-
                                             </div>
-
                                         </div>
 
                                         <div className="faculty-card-details">
-
                                             <div className="faculty-card-detail">
-
                                                 <span>
                                                     Faculty
                                                 </span>
@@ -283,14 +275,9 @@ function AdminStudent({student, getStudents}) {
                                                 <strong>
                                                     {student.faculty}
                                                 </strong>
-
                                             </div>
-                                        </div>
 
-                                        <div className="faculty-card-details">
-
-                                            <div className="faculty-card-detail">
-
+                                             <div className="faculty-card-detail">
                                                 <span>
                                                     Status
                                                 </span>
@@ -302,7 +289,6 @@ function AdminStudent({student, getStudents}) {
                                                 >
                                                     {student.status || "Unknown"}
                                                 </strong>
-
                                             </div>
                                         </div>
 

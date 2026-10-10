@@ -144,6 +144,8 @@ function LecturerStudent({student, getLecturerStudents}) {
                                         Faculty
                                     </th>
 
+                                    <th>Status</th>
+
                                     <th>
                                         Actions
                                     </th>
@@ -182,6 +184,17 @@ function LecturerStudent({student, getLecturerStudents}) {
                                             <td>
                                                 {student.faculty}
                                             </td>
+
+                                            <td>
+                                                <span
+                                                    className={`student-status-badge status-${String(
+                                                        student.status || "unknown"
+                                                    ).toLowerCase()}`}
+                                                >
+                                                    {student.status || "Unknown"}
+                                                </span>
+                                            </td>
+
 
                                             <td>
 
@@ -261,9 +274,7 @@ function LecturerStudent({student, getLecturerStudents}) {
                                         </div>
 
                                         <div className="faculty-card-details">
-
                                             <div className="faculty-card-detail">
-
                                                 <span>
                                                     Faculty
                                                 </span>
@@ -271,9 +282,23 @@ function LecturerStudent({student, getLecturerStudents}) {
                                                 <strong>
                                                     {student.faculty}
                                                 </strong>
-
                                             </div>
 
+                                            <div className="faculty-card-detail">
+
+                                                <span>
+                                                    Status
+                                                </span>
+
+                                                <strong
+                                                    className={`student-status-badge status-${String(
+                                                        student.status || "unknown"
+                                                    ).toLowerCase()}`}
+                                                >
+                                                    {student.status || "Unknown"}
+                                                </strong>
+
+                                            </div>
                                         </div>
 
                                         <div className="faculty-card-actions">
