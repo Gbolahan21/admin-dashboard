@@ -250,7 +250,7 @@ function AdminAttendance({ getAttendance, attendance, level, getLevels }) {
 
           <div>
             <span>Present</span>
-            <strong>{presentRecords}</strong>
+            <strong>{presentRecords || 0}</strong>
           </div>
         </div>
 
@@ -262,7 +262,7 @@ function AdminAttendance({ getAttendance, attendance, level, getLevels }) {
 
           <div>
             <span>Absent</span>
-            <strong>{absentRecords}</strong>
+            <strong>{absentRecords || 0}</strong>
           </div>
         </div>
 
@@ -274,7 +274,7 @@ function AdminAttendance({ getAttendance, attendance, level, getLevels }) {
 
           <div>
             <span>Attendance Rate</span>
-            <strong>{attendanceRate}%</strong>
+            <strong>{attendanceRate || 0}%</strong>
           </div>
         </div>
 

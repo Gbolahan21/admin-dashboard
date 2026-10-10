@@ -144,6 +144,8 @@ function AdminStudent({student, getStudents}) {
                                         Faculty
                                     </th>
 
+                                    <th>Status</th>
+
                                     <th>
                                         Actions
                                     </th>
@@ -181,6 +183,16 @@ function AdminStudent({student, getStudents}) {
 
                                             <td>
                                                 {student.faculty}
+                                            </td>
+
+                                            <td>
+                                                <span
+                                                    className={`student-status-badge status-${String(
+                                                        student.status || "unknown"
+                                                    ).toLowerCase()}`}
+                                                >
+                                                    {student.status || "Unknown"}
+                                                </span>
                                             </td>
 
                                             <td>
@@ -273,7 +285,25 @@ function AdminStudent({student, getStudents}) {
                                                 </strong>
 
                                             </div>
+                                        </div>
 
+                                        <div className="faculty-card-details">
+
+                                            <div className="faculty-card-detail">
+
+                                                <span>
+                                                    Status
+                                                </span>
+
+                                                <strong
+                                                    className={`student-status-badge status-${String(
+                                                        student.status || "unknown"
+                                                    ).toLowerCase()}`}
+                                                >
+                                                    {student.status || "Unknown"}
+                                                </strong>
+
+                                            </div>
                                         </div>
 
                                         <div className="faculty-card-actions">
@@ -387,6 +417,13 @@ function AdminStudent({student, getStudents}) {
                                     <span>Semester</span>
                                     <strong>
                                         {selectedStudent.semester || "N/A"}
+                                    </strong>
+                                </div>
+
+                                <div className="student-detail">
+                                    <span>Year</span>
+                                    <strong>
+                                        {selectedStudent.academic_year || "N/A"}
                                     </strong>
                                 </div>
                             </div>

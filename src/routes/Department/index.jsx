@@ -19,6 +19,7 @@ function Department({
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [departmentName, setDepartmentName] = useState("");
     const [selectedFaculty, setSelectedFaculty] = useState("");
+    const [maxLevel, setMaxLevel] = useState("");
     const [isDepartmentLoading, setIsDepartmentLoading] = useState(true);
     const [editingDepartment, setEditingDepartment] = useState(null);
     const [deletingDepartment, setDeletingDepartment] = useState(null);
@@ -63,6 +64,7 @@ function Department({
         setEditingDepartment(department);
         setDepartmentName(department.name);
         setSelectedFaculty(String(department.faculty_id));
+        setMaxLevel(String(department.max_level));
         setModalVisible(true);
     }, []);
 
@@ -70,6 +72,7 @@ function Department({
         setEditingDepartment(null);
         setDepartmentName("");
         setSelectedFaculty("");
+        setMaxLevel("");
         setModalVisible(true);
     }, []);
 
@@ -79,6 +82,7 @@ function Department({
         setModalVisible(false);
         setDepartmentName("");
         setSelectedFaculty("");
+        setMaxLevel("");
         setEditingDepartment(null);
     }, [isSubmitting]);
 
@@ -96,8 +100,10 @@ function Department({
         event.preventDefault();
 
         const name = departmentName.trim();
+        const facultyId = Number(selectedFaculty);
+        const selectedMaxLevel = Number(maxLevel);
 
-        if (!name || !selectedFaculty) {
+        if (!name || !facultyId || ![500, 600].includes(selectedMaxLevel)) {
             return;
         }
 
@@ -108,7 +114,8 @@ function Department({
                 await updateDepartment(
                     editingDepartment.id,
                     name,
-                    Number(selectedFaculty),
+                    facultyId,
+                    selectedMaxLevel,
                     (error) => {
                         console.error(
                             "Update department error:",
@@ -122,7 +129,8 @@ function Department({
             } else {
                 await createDepartment(
                     name,
-                    Number(selectedFaculty),
+                    facultyId,
+                    selectedMaxLevel,
                     (error) => {
                         console.error(
                             "Create department error:",
@@ -144,6 +152,7 @@ function Department({
         updateDepartment,
         createDepartment,
         closeModal,
+        maxLevel
     ]);
 
     const handleDelete = useCallback(async () => {
@@ -223,6 +232,7 @@ function Department({
                                     <th>#</th>
                                     <th>Department Name</th>
                                     <th>Faculty</th>
+                                    <th>Maximum Level</th>
                                     <th>Created</th>
                                     <th>Actions</th>
                                 </tr>
@@ -242,6 +252,10 @@ function Department({
 
                                         <td>
                                             {department.faculty_name}
+                                        </td>
+
+                                        <td>
+                                            {department.max_level} Level
                                         </td>
 
                                         <td>
@@ -307,6 +321,11 @@ function Department({
                                             <strong>
                                                 {department.faculty_name}
                                             </strong>
+                                        </div>
+
+                                        <div className="faculty-card-detail">
+                                            <span>Maximum Level</span>
+                                            <strong>{department.max_level} Level</strong>
                                         </div>
 
                                         <div className="faculty-card-detail">
@@ -388,6 +407,26 @@ function Department({
                         />
                     </div>
 
+                    <div className="faculty-form-group">
+                        <Dropdown
+                            label="Maximum Programme Level "
+                            placeholder="Select maximum programme level"
+                            value={maxLevel}
+                            onSelect={setMaxLevel}
+                            options={[ 
+                                { 
+                                    value: "500", 
+                                    label: "500 Level (5-year programme)", 
+                                }, 
+                                { 
+                                    value: "600", 
+                                    label: "600 Level (6-year programme)", 
+                                }, 
+                            ]}
+                            disabled={isSubmitting}
+                        />
+                    </div>
+
 
                     {/* Department Name */}
                     <div className="faculty-form-group">
@@ -407,7 +446,6 @@ function Department({
                         />
                     </div>
 
-
                     <div className="faculty-modal-actions">
                         <button
                             type="button"
@@ -424,7 +462,8 @@ function Department({
                             disabled={
                                 isSubmitting ||
                                 !departmentName.trim() ||
-                                !selectedFaculty
+                                !selectedFaculty ||
+                                !["500", "600"].includes(maxLevel)
                             }
                         >
                             {isSubmitting

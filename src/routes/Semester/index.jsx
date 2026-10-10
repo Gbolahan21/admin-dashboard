@@ -16,6 +16,7 @@ function Semester({
     const [modalVisible, setModalVisible] = useState(false);
     const [isSemesterLoading, setIsSemesterLoading] = useState(true);
     const [semesterName, setSemesterName] = useState("");
+    const [academicYear, setAcademicYear] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSettingCurrent, setIsSettingCurrent] = useState(false);
     const [editingSemester, setEditingSemester] = useState(null);
@@ -61,12 +62,14 @@ function Semester({
     const openEditModal = useCallback((semester) => {
         setEditingSemester(semester);
         setSemesterName(semester.name);
+        setAcademicYear(semester.academic_year || "");
         setModalVisible(true);
     }, []);
 
     const openAddModal = useCallback(() => {
         setEditingSemester(null);
         setSemesterName("");
+        setAcademicYear("");
         setModalVisible(true);
     }, []);
 
@@ -75,6 +78,7 @@ function Semester({
 
         setModalVisible(false);
         setSemesterName("");
+        setAcademicYear("");
         setEditingSemester(null);
     }, [isSubmitting]);
 
@@ -92,49 +96,59 @@ function Semester({
         event.preventDefault();
 
         const name = semesterName.trim();
+        const year = academicYear.trim();
 
-        if (!name) {
+        if (!name || !/^\d{4}\/\d{4}$/.test(year)) {
+            return;
+        }
+
+        const [startYear, endYear] = year.split("/").map(Number);
+
+        if (endYear !== startYear + 1) {
             return;
         }
 
         setIsSubmitting(true);
 
         try {
+            const payload = {
+                name,
+                academic_year: year,
+            };
+
             if (editingSemester) {
                 await updateSemester(
                     editingSemester.id,
-                    name,
-                    (error) => {
-                        console.error(
-                            "Update semester error:",
-                            error
-                        );
-                    },
+                    payload,
+                    (error) => console.error("Update semester error:", error),
                     () => {
                         setModalVisible(false);
                         setSemesterName("");
+                        setAcademicYear("");
                         setEditingSemester(null);
                     }
                 );
             } else {
                 await createSemester(
-                    name,
-                    (error) => {
-                        console.error(
-                            "Create semester error:",
-                            error
-                        );
-                    },
+                    payload,
+                    (error) => console.error("Create semester error:", error),
                     () => {
                         setModalVisible(false);
                         setSemesterName("");
+                        setAcademicYear("");
                     }
                 );
             }
         } finally {
             setIsSubmitting(false);
         }
-    }, [semesterName, editingSemester, updateSemester, createSemester]);
+    }, [
+        semesterName,
+        academicYear,
+        editingSemester,
+        updateSemester,
+        createSemester,
+    ]);
 
     const openCurrentSemesterModal = useCallback((semester) => {
         if (semester.is_current || isSettingCurrent) {
@@ -251,6 +265,7 @@ function Semester({
                                 <tr>
                                     <th>#</th>
                                     <th>Semester</th>
+                                    <th>Academic Year</th>
                                     <th>Created</th>
                                     <th>Actions</th>
                                 </tr>
@@ -262,6 +277,8 @@ function Semester({
                                         <td>{index + 1}</td>
 
                                         <td>{semester.name}</td>
+
+                                        <td>{semester.academic_year}</td>
 
                                         <td>
                                             {new Date(
@@ -327,6 +344,11 @@ function Semester({
                                         <div className="faculty-card-name">
                                             {semester.name}
                                         </div>
+                                    </div>
+
+                                    <div className="faculty-card-detail">
+                                        <span>Academic Year</span>
+                                        <strong>{semester.academic_year}</strong>
                                     </div>
 
                                     <div className="faculty-card-details">
@@ -415,6 +437,27 @@ function Semester({
                             placeholder="Enter semester name"
                             autoFocus
                             disabled={isSubmitting}
+                            style={{marginBottom: '20px'}}
+                        />
+                    </div>
+
+                    <div className="faculty-form-group">
+                        <label htmlFor="academicYear">
+                            Academic Year
+                        </label>
+
+                        <input
+                            id="academicYear"
+                            type="text"
+                            value={academicYear}
+                            onChange={(event) =>
+                                setAcademicYear(event.target.value)
+                            }
+                            placeholder="e.g. 2026/2027"
+                            pattern="\d{4}/\d{4}"
+                            title="Enter an academic year such as 2026/2027"
+                            required
+                            disabled={isSubmitting}
                         />
                     </div>
 
@@ -433,7 +476,10 @@ function Semester({
                             className="faculty-save-button"
                             disabled={
                                 isSubmitting ||
-                                !semesterName.trim()
+                                !semesterName.trim() ||
+                                !/^\d{4}\/\d{4}$/.test(academicYear) ||
+                                Number(academicYear.split("/")[1]) !==
+                                    Number(academicYear.split("/")[0]) + 1
                             }
                         >
                             {isSubmitting

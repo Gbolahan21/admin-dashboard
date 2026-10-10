@@ -25,7 +25,7 @@ export const getDepartments = (error, success) =>
 
   );
 
-export const createDepartment = (name, faculty_id, error, success) =>
+export const createDepartment = (name, faculty_id, max_level, error, success) =>
 
   Helpers.api(
 
@@ -34,7 +34,7 @@ export const createDepartment = (name, faculty_id, error, success) =>
     'POST',
 
     {
-      name, faculty_id,
+      name, faculty_id, max_level,
     },
 
     { error, success },
@@ -43,7 +43,7 @@ export const createDepartment = (name, faculty_id, error, success) =>
 
   );
 
-export const updateDepartment = (id, name, faculty_id, error, success) =>
+export const updateDepartment = (id, name, faculty_id, max_level, error, success) =>
 
   Helpers.api(
 
@@ -52,7 +52,7 @@ export const updateDepartment = (id, name, faculty_id, error, success) =>
     'PUT',
 
     {
-      name, faculty_id,
+      name, faculty_id, max_level,
     },
 
     { error, success },

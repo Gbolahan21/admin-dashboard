@@ -30,7 +30,7 @@ export const getSemesters = (error, success) =>
 
 
 // CREATE FACULTY
-export const createSemester = (name, error, success) =>
+export const createSemester = (payload, error, success) =>
 
   Helpers.api(
 
@@ -38,9 +38,7 @@ export const createSemester = (name, error, success) =>
 
     'POST',
 
-    {
-      name,
-    },
+    payload,
 
     { error, success },
 
@@ -50,7 +48,7 @@ export const createSemester = (name, error, success) =>
 
 
 // UPDATE FACULTY
-export const updateSemester = (id, name, error, success) =>
+export const updateSemester = (id, payload, error, success) =>
 
   Helpers.api(
 
@@ -58,9 +56,7 @@ export const updateSemester = (id, name, error, success) =>
 
     'PUT',
 
-    {
-      name,
-    },
+    payload,
 
     { error, success },
 
