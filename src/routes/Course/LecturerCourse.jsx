@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Trash2, BookOpen } from "lucide-react";
-import { Button, Modal, Dropdown } from "../../components";
-
+import { Button, Modal, Dropdown, Pagination } from "../../components";
 
 function LecturerCourse({
     getCurrentSemester,
@@ -19,6 +18,7 @@ function LecturerCourse({
     availableCourses,
     myCourses,
 }) {
+    const courses = useMemo(() => (Array.isArray(myCourses) ? myCourses : []), [myCourses]);
 
     const [selectedFaculty, setSelectedFaculty] = useState("");
     const [selectedDepartment, setSelectedDepartment] = useState("");
@@ -26,6 +26,9 @@ function LecturerCourse({
     const [selectedCourses, setSelectedCourses] = useState([]);
     const [showRemoveModal, setShowRemoveModal] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const itemsPerPage = 10;
 
     useEffect(() => {
       document.title = 'Lecturer | Moh';
@@ -186,6 +189,21 @@ function LecturerCourse({
                 Number(level.id) === Number(selectedLevel)
         )?.name || "",
         [levels, selectedLevel]
+    );
+
+    const totalPages = useMemo(
+        () => Math.ceil(courses.length / itemsPerPage),
+        [courses.length, itemsPerPage]
+    );
+
+    const startIndex = useMemo(
+        () => (currentPage - 1) * itemsPerPage,
+        [currentPage, itemsPerPage]
+    );
+
+    const paginatedCourses = useMemo(
+        () => courses.slice(startIndex, startIndex + itemsPerPage),
+        [courses, startIndex, itemsPerPage]
     );
 
     return (
@@ -381,14 +399,14 @@ function LecturerCourse({
                     </div>
 
                     <span className="course-count">
-                        {myCourses.length}{" "}
-                        {myCourses.length === 1
+                        {courses.length}{" "}
+                        {courses.length === 1
                             ? "Course"
                             : "Courses"}
                     </span>
                 </div>
 
-                {myCourses.length === 0 ? (
+                {courses.length === 0 ? (
                     <div className="empty-courses">
                         <BookOpen size={28} />
 
@@ -415,7 +433,7 @@ function LecturerCourse({
 
                             <tbody>
 
-                                {myCourses.map((course) => (
+                                {paginatedCourses.map((course) => (
                                     <tr key={course.registration_id}>
 
                                         <td>
@@ -481,6 +499,12 @@ function LecturerCourse({
 
                     </div>
                 )}
+
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                />
 
             </div>
 
