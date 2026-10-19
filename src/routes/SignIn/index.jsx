@@ -136,16 +136,19 @@ function SignIn({ signin, navigate }) {
           </div>
 
           <div className="remember-container">
-                <label className="remember-label">
-                    <input
-                        type="checkbox"
-                        checked={rememberMe}
-                        onChange={(e) => setRememberMe(e.target.checked)}
-                    />
+            <label className="remember-label">
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+              />
 
-                    <span>Remember me</span>
-                </label>
-            </div>
+              <span>Remember me</span>
+            </label>
+            <Link to={`/forgot-password?role=${role}`} className="forgot-password-link">
+              Forgot Password?
+            </Link>
+          </div>
 
           <Button type="submit" title="Login" iconRight={<LogIn size={18} color="white" />} onClick={handleLogin} disabled={details} />
 

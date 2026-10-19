@@ -13,6 +13,7 @@ import Level from "./Level";
 import Course from "./Course";
 import Semester from "./Semester";
 import NotFound from "./NotFound";
+import ForgotPassword from "./ForgotPassword";
 
 const baseRoutes = {
   public: [
@@ -30,6 +31,11 @@ const baseRoutes = {
       name: "SignUp",
       component: SignUp,
       path: "/signup",
+    },
+    {
+      name: "ForgotPassword",
+      component: ForgotPassword,
+      path: "/forgot-password",
     },
   ],
 
