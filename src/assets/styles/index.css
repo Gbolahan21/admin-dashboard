@@ -3236,18 +3236,7 @@ button:disabled {
 }
 
 /* forgot password */
-.forgot-password-container {
-    width: 100%;
-    max-width: 500px;
-    margin: 0 auto;
-    padding: 40px 30px;
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-}
-
-.forgot-password-container h2 {
+.reset-password-container h2 {
     margin: 0 0 10px;
     font-size: 22px;
     font-weight: 700;
@@ -3255,7 +3244,7 @@ button:disabled {
     text-align: center;
 }
 
-.forgot-password-container p {
+.reset-password-container h4 {
     margin: 0 0 20px;
     font-size: 14px;
     color: #6b7280;
@@ -3275,3 +3264,13 @@ button:disabled {
     outline: none;
     box-sizing: border-box;
 }
+
+.back-to-signin-link {
+    display: block;
+    margin-top: 12px;
+    font-size: 13px;
+    color: #2563eb;
+    text-align: center;
+    text-decoration: none;
+}
+

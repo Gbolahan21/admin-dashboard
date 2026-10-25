@@ -8,6 +8,9 @@ import {
   SIGNUP,
   AUTH_INITIALIZED,
   LOAD,
+  FORGOT_PASSWORD,
+  VERIFY_RESET_CODE,
+  RESET_PASSWORD
 } from '../types';
 
 export const initialState = {
@@ -59,6 +62,22 @@ export default function (state = initialState, action) {
         authenticated: true,
         initialized: true,
       };
+
+    case FORGOT_PASSWORD:
+      return {
+        ...state,
+      };
+
+    case VERIFY_RESET_CODE:
+      return {
+        ...state,
+      };
+
+    case RESET_PASSWORD:
+      return {
+        ...state,
+      };
+
 
     case AUTH_INITIALIZED:
       return {

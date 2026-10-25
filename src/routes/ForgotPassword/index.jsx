@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import Button from "../../components/Button";
 import * as Helpers from "../../helpers";
 
@@ -7,6 +7,8 @@ function ForgotPassword({
     forgotPassword,
 }) {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const role = searchParams.get("role") || "lecturer";
     const [email, setEmail] = useState("");
     const [sending, setSending] = useState(false);
 
@@ -33,7 +35,6 @@ function ForgotPassword({
             
             async (response) => {
                 try {
-                    console.log("1. Forgot password response:", response);
 
                     await Helpers.sessionStorage.setSessionData(
                         "passwordReset",
@@ -42,8 +43,6 @@ function ForgotPassword({
                         }
                     );
 
-                    console.log("2. Session saved");
-
                     setSending(false);
 
                     Helpers.notification.success(
@@ -51,13 +50,8 @@ function ForgotPassword({
                         "A password reset code has been sent to your email."
                     );
 
-                    console.log("3. Navigating to PasswordVerification");
-
-                    navigate.replace("PasswordVerification");
-
-                    console.log("4. Navigation completed");
+                    navigate(`/verify-password?role=${role}`, {replace: true})
                 } catch (error) {
-                    console.error("ForgotPassword error:", error);
 
                     setSending(false);
 
@@ -68,35 +62,39 @@ function ForgotPassword({
                 }
             }
         );
-    }, [forgotPassword, navigate, email]);
+    }, [forgotPassword, navigate, email, role]);
 
     return (
-        <div className="forgot-password-container">
-            <h2>Forgot Password?</h2>
-            <p>
-                Enter the email address associated with your
-                account and we'll send you a verification
-                code.
-            </p>
+        <div className='signup-container reset-password-container'>
+            <div className='signup-card'>
+                <h2>Forgot Password?</h2>
+                <h4>
+                    Enter the email address associated with your
+                    account and we'll send you a verification
+                    code.
+                </h4>
 
-            <label>Email</label>
-            <input
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-            />
+                <input
+                    className='signup-input'
+                    placeholder="Enter your email"
+                    type="email"
+                    autoCapitalize="none"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                />
 
-            <Button
-                onClick={handleSubmit}
-                title="Send Code"
-                disabled={sending}
-                loading={sending}
-            />
 
-            <Link to="/signin" className="forgot-password-link">
-                Back to Sign In
-            </Link>
+                <Button
+                    onClick={handleSubmit}
+                    title="Send Code"
+                    disabled={sending}
+                    loading={sending}
+                />
+
+                <Link to={`/signin?role=${role}`} className="back-to-signin-link">
+                    Back to Sign In
+                </Link>
+            </div>
         </div>
     );
 }

@@ -1,22 +1,31 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { ArrowLeft, Home } from "lucide-react";
 import notification from "../helpers/notification";
 
 const NotFound = () => {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
 
     const admin = useSelector((state) => state.admin);
+    const role =
+        (admin?.authenticated && admin?.role) ||
+        localStorage.getItem("role") ||
+        searchParams.get("role") ||
+        "lecturer";
 
     const handleDashboard = () => {
-        const token = localStorage.getItem("token");
+        const tokenKey =
+            role === "admin" ? "adminToken" : "lecturerToken";
+
+        const token = localStorage.getItem(tokenKey);
 
         if (!token || !admin?.authenticated) {
             notification.error(
                 "Please sign in to access the dashboard."
             );
 
-            navigate("/signin");
+            navigate(`/signin?role=${role}`)
             return;
         }
 

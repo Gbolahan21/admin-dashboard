@@ -14,6 +14,8 @@ import Course from "./Course";
 import Semester from "./Semester";
 import NotFound from "./NotFound";
 import ForgotPassword from "./ForgotPassword";
+import VerifyPassword from "./VerifyPassword";
+import ResetPassword from "./ResetPassword";
 
 const baseRoutes = {
   public: [
@@ -36,6 +38,16 @@ const baseRoutes = {
       name: "ForgotPassword",
       component: ForgotPassword,
       path: "/forgot-password",
+    },
+    {
+      name: "VerifyPassword",
+      component: VerifyPassword,
+      path: "/verify-password",
+    },
+    {
+      name: "ResetPassword",
+      component: ResetPassword,
+      path: "/reset-password",
     },
   ],
 

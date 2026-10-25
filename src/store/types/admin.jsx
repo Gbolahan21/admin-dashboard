@@ -4,3 +4,6 @@ export const SIGNIN = 'SIGNIN';
 export const SIGNUP = 'SIGNUP';
 export const AUTH_INITIALIZED = 'AUTH_INITIALIZED';
 export const LOAD = 'LOAD';
+export const FORGOT_PASSWORD = "FORGOT_PASSWORD";
+export const VERIFY_RESET_CODE = "VERIFY_RESET_CODE";
+export const RESET_PASSWORD = "RESET_PASSWORD";
